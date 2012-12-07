@@ -1,0 +1,48 @@
+{
+	"ground1": {
+		"nodes": {
+			"obstacle": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/obstacles/ground1.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "iron",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 2.222,
+						"height": 1
+					}
+				}
+			}
+		}
+	},
+	"ground2": {
+		"nodes": {
+			"obstacle": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/obstacles/ground2.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "iron",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 1.778,
+						"height": 1
+					}
+				}
+			}
+		}
+	}
+}

@@ -5,3 +5,4 @@ var jsein = require('jsein');
 require('smog').app.config = require('../src/configs/development.json');
 
 exports.projectPath = __dirname + '/../src';
+exports.testsPath = __dirname;

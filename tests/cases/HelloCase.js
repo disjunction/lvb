@@ -6,7 +6,7 @@ var path = require('../bootstrap').projectPath,
 exports.testHello = function(test) {
 	var player = new smog.entity.Player,
 		config = smog.app.config,
-		nc = new flame.entity.NodeContainer;
+		t = new flame.entity.Thing;
 	
 	test.ok(config.ppm > 1);
 		

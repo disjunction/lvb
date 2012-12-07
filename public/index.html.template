@@ -16,7 +16,7 @@
             .cocos2d-app {
                 border: 1px solid #000;
                 width: 640px;
-                height: 280px;
+                height: 400px;
                 display: block;
                 margin: 0 auto;
                 -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);

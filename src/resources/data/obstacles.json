@@ -1,0 +1,48 @@
+{
+	"house1_base": {
+		"nodes": {
+			"obstacle": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/obstacles/house1_base.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "wood",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 4,
+						"height": 3.31
+					}
+				}
+			}
+		}
+	},
+	"house1_windows": {
+		"nodes": {
+			"obstacle": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/obstacles/house1_windows.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "wood",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 4,
+						"height": 2.14
+					}
+				}
+			}
+		}
+	}
+}
