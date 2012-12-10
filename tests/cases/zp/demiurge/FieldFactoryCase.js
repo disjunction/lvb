@@ -6,6 +6,7 @@ var path = require('../../../bootstrap').projectPath,
 exports.testMake = function(test) {
 	var defRepo = new jsein.JsonRepo();
 	defRepo.loadFile(path + '/resources/data/ground');
+	defRepo.loadFile(path + '/resources/data/obstacles');
 	
 	var factory = new FieldFactory(defRepo),
 	    field = factory.make();

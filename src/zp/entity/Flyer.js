@@ -7,8 +7,9 @@ var
 	ccp    = geo.ccp;
 
 function Flyer(opts) {
-	Flyer.superclass.constructor.call(this);
+	Flyer.superclass.constructor.call(this, opts);
 	this.size = geo.sizeMake(1,1);
+	this.direction = 1;
 }
 
 Flyer.inherit(flame.entity.Movable, {

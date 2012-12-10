@@ -4,7 +4,7 @@
 			"obstacle": {
 				"type": "sprite",
 				"opts": {
-					"file": "/resources/sprites/obstacles/house1_base.png"
+					"file": "/resources/sprites/obstacles/house2_base.png"
 				}
 			}
 		},
@@ -12,7 +12,7 @@
 			"type": "static",
 			"fixtures": {
 				"main": {
-					"material": "wood",
+					"material": "pitch",
 					"shape": "PolygonShape",
 					"box": {
 						"width": 4,
@@ -27,7 +27,7 @@
 			"obstacle": {
 				"type": "sprite",
 				"opts": {
-					"file": "/resources/sprites/obstacles/house1_windows.png"
+					"file": "/resources/sprites/obstacles/house2_windows.png"
 				}
 			}
 		},
@@ -35,11 +35,38 @@
 			"type": "static",
 			"fixtures": {
 				"main": {
-					"material": "wood",
+					"material": "pitch",
 					"shape": "PolygonShape",
 					"box": {
 						"width": 4,
 						"height": 2.14
+					}
+				}
+			}
+		}
+	},
+	"house1_roof": {
+		"nodes": {
+			"obstacle": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/obstacles/house2_roof.png",
+					"anchorPoint": {"x": 0.5, "y": -0.05}
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "pitch",
+					"shape": "PolygonShape",
+					"polygon": {
+						"vertices": [
+						     {"x": -2, "y": 0},
+						     {"x": 2, "y": 0},
+						     {"x": 0, "y": 2.16}
+						 ]
 					}
 				}
 			}

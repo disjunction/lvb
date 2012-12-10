@@ -1,0 +1,32 @@
+{
+	"tree1": {
+		"nodes": {
+			"bg": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/backgrounds/tree.png"
+				}
+			}
+		}
+	},
+	"tree1front": {
+		"nodes": {
+			"stuff": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/backgrounds/tree.png"
+				}
+			}
+		}
+	},
+	"softsky": {
+		"nodes": {
+			"far": {
+				"type": "sprite",
+				"opts": {
+					"file": "/resources/sprites/backgrounds/softsky.png"
+				}
+			}
+		}
+	}
+}

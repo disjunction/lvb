@@ -16,12 +16,15 @@ var smog = require('smog');
 smog.app.config = require('/configs/development');
 
 var flame = require('flame'),
-	Flyer = require('./zp/entity/Flyer');
+	Flyer = require('./zp/entity/Flyer'),
+	Interactor = flame.viewport.Interactor;
 
 var defRepo = new jsein.JsonRepo();
 defRepo.loadFile('/resources/data/zeps');
 defRepo.loadFile('/resources/data/ground');
 defRepo.loadFile('/resources/data/obstacles');
+defRepo.loadFile('/resources/data/effects');
+defRepo.loadFile('/resources/data/backgrounds');
 
 /**
  * @class Initial application layer
@@ -46,24 +49,44 @@ function Zp () {
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
     this.protagonist.viewport.addLayersTo(this);
+    this.protagonist.viewport.makeAnimator();
+    this.protagonist.viewport.scaleCameraTo(0.5, 5);
+    
     this.protagonist.viewport.moveCameraTo = function(point) {
-		this.scrolled.position = geo.ccp(-point.x + this.size.width / 4, 0);
+		this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
 	};
     
-    var zep = new Flyer();
-    zep.location = ccp(0, 7);
-    zep.type = 'ZepSelf';
+    var zep = new Flyer('ZepSelf');
+    zep.location = ccp(2, 2);
     
     this.fe.ego = this.protagonist.ego = zep;
-    
     this.fe.addFlyer(zep);
-    this.fe.get(zep.bodyId).SetLinearVelocity(ccp(10,0));
     
+    this.initInteractor();
+        
     this.scheduleUpdate();
 }
 
 // Inherit from cocos.nodes.Layer
 Zp.inherit(Layer, {
+	initInteractor: function() {
+		var Applier = require('./zp/viewport/InteractionApplier'),
+		    applier = new Applier({
+		    	protagonist: this.protagonist
+		    });
+	    
+	    var layout = {keys: {}};
+	    layout.keys[Interactor.ARROW_UP] = {type: 'state', state: 'up'};
+	    layout.keys[Interactor.LMB] = {type: 'state', state: 'up'};
+	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
+	    
+	    this.interactor = new Interactor({
+	    	layer: this,
+	    	applier: applier,
+	    	layout: layout
+	    });
+	    this.interactor.afterInteract();
+	},
 	update: function(dt) {
 		this.fe.step();
 		this.protagonist.syncCamera();

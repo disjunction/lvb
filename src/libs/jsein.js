@@ -1,1 +1,1 @@
-/home/or/projects/spavengers/repo/src/libs/jsein.js
+/home/or/projects/flatgametk/util/jsein.js
