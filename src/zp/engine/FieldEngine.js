@@ -3,8 +3,10 @@
 var
     geo      = require('pointExtension'),
     ccp      = geo.ccp,
+    jsein    = require('jsein'),
 	flame    = require('flame'),
-	Intpacker = require('Intpacker');
+	Intpacker = require('Intpacker'),
+	EffectFactory = require('../demiurge/EffectFactory');
 
 function FieldEngine(field) {
     FieldEngine.superclass.constructor.call(this, field);
@@ -13,7 +15,7 @@ function FieldEngine(field) {
     this.pointer = 0;
     
     // player zeppelin thrust
-    this.thrust = 2.5;
+    this.thrust = 5;
     
     // level of the roof (topmost reachable point)
     this.roof = 19;
@@ -27,6 +29,9 @@ function FieldEngine(field) {
     // ugly solution but it creates less possible conflicts
     this.lastCleanup = Date.now();
     this.cleanupPeriod = 1000;
+    
+    // one more ugly thing, used to bypass messaging between protagonist and fe
+    this.ef = new EffectFactory();
 }
 
 FieldEngine.inherit(flame.engine.FieldEngine, {
@@ -43,13 +48,18 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			if (a && a.location.x - this.lookAhead < this.ego.location.x) {
 				if (!a.bodyId) {
 					this.addThing(a);
-					//this.bodyBuilder.embody(a);
 					this.nodeBuilder.envision(a);
 				}
 				this.pointer++;
 			} else {
 				return;
 			}
+		}
+	},
+	
+	explodeFlyer: function(flyer) {
+		if (!flyer.explodeThings) {
+			throw new Error('flyer ' + flyer.type + ' has no explodeThings defined');
 		}
 	},
 	
@@ -98,6 +108,8 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	},
 	
 	preStep: function() {
+		FieldEngine.superclass.preStep.call(this);
+		
 		this.checkMaterialize();
 		
 		for (var key in this.items) {
@@ -126,10 +138,10 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		if (Date.now() - this.lastCleanup > this.cleanupPeriod) {
 			this.cleanupField();
 			this.lastCleanup = Date.now();
-		}	
+		}
 	},
+	
 	cleanupField: function() {
-		
 		for (var k in this.field.items) {
 			var thing = this.field.get(k);
 			if (thing.locked) continue;
@@ -137,6 +149,59 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 				this.removeThing(thing);
 			}
 		}
+	},
+	
+	explodeThing: function(thing, protagonist) {
+		var def = this.getDefByThing(thing);
+		if (!def.explosion) {
+			throw new Error('explosion not defined in thing def ' + thing.type);
+		}
+		if (!Array.isArray(def.explosion.splinters)) {
+			throw new Error('explosion.splinters must be array in thing def ' + thing.type);
+		}
+		this.removeThing(thing);
+		for (var i in def.explosion.splinters) {
+			var spawnDef = jsein.clone(def.explosion.splinters[i]);
+			spawnDef.location = geo.ccpAdd(thing.location, spawnDef.location);
+			this.spawnThing(spawnDef);
+		}
+	},
+	
+	// this code is bad because fe shouldn't depend on protagonist and ef
+	tryShot: function(thing, protagonist) {
+		var gun = thing.gun;
+		
+		if (gun.autofire && gun.charge < gun.maxCharge) return;
+		
+		var opts = {
+			subject: thing,
+			fromPoint: thing.location,
+			angle: thing.angle,
+			distance: gun.range,
+			recoil: gun.recoil,
+			impact: gun.impact
+		};
+		if (this.get(thing.bodyId).GetLinearVelocity().x <= 2) {
+			opts.recoil = 0;
+		}
+		
+		var r = this.rayShot(opts);
+		
+		if (r) {
+			var target = r.body.thing;
+			if (typeof target.hp != 'undefined') {
+				target.hp -= gun.damage;
+				if (target.hp <= 0) {
+					this.explodeThing(target, protagonist);
+				} else {
+					this.ef.gunHit(protagonist, gun, r);
+				}
+			} else {
+				this.ef.gunHit(protagonist, gun, r);
+			}
+		}
+		
+		gun.resetCharge();
 	}
 });
 

@@ -2,10 +2,26 @@
 	"snowflake": {
 		"nodes": {
 			"main": {
-				"type": "sprite",
 				"opts": {
 					"file": "/resources/sprites/effects/snowflake.png"
-				}
+				},
+				"animate": [
+					{
+						"action": "Sequence",
+						"actions": [
+									{
+										"action": "DelayTime",
+										"duration": 5
+									},
+								    {
+										"action": "FadeTo",
+										"duration": 1,
+										"toOpacity": 0
+								    }						            
+						]
+					},
+				    {"action": "Remove", "delay": 6.1, "removeThing": true}
+				]
 			}
 		},
 		"body": {
@@ -20,6 +36,34 @@
 						"height": 0.27
 					}
 				}
+			}
+		}
+	},
+	"gutling_hit": {
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/effects/gutling_hit.png",
+					"scale": 0.2
+				},
+				"animate": [
+				    {
+						"action": "FadeTo",
+						"duration": 0.3,
+						"toOpacity": 0
+				    },
+				    {
+						"action": "ScaleBy",
+						"duration": 0.3,
+						"scale": 2
+					},
+				    {
+						"action": "RotateBy",
+						"duration": 0.3,
+						"angle": 45
+					},
+				    {"action": "Remove", "delay": 3}
+				]
 			}
 		}
 	}

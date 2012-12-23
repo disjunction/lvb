@@ -1,0 +1,165 @@
+{
+	"ZepSelf": {
+		"className": "Flyer",
+	    "nodes": {
+		    "main": {
+		    	"type": "animatedSprite",
+				"opts": {
+					"file": "/resources/sprites/flyers/zep1_ani.png",
+					"scale": 0.3,
+					"size": {"width": 266, "height": 161},
+					"frames": [
+					           {"origin": {"x": 0, "y": 0}},
+					           {"origin": {"x": 266, "y": 0}},
+					           {"origin": {"x": 532, "y": 0}}
+							  ],
+					"endless": true,
+					"delay": 0.1
+				}
+			},
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/flyers/parts/gutling.png",
+					"scale": 0.5,
+					"anchorPoint": {"x": -0.8, "y": 1}
+				}
+			}
+		},
+		"body": {
+			"type": "dynamic",
+			"angularDamping": 1.5,
+			"bullet": true,
+			"fixtures": {
+				"main": {
+					"material": "gum",
+					"shape": "PolygonShape",
+					"polygon": {
+						"vertices": [
+					        {"x": -1.1, "y": 0.3},
+						    {"x": -0.8, "y": -0.7},
+						    {"x": 0.8, "y": -0.7},
+						    {"x": 1.1, "y": 0.3},
+						    {"x": 0.8, "y": 0.5},
+						    {"x": -0.8, "y": 0.5}
+						]
+					},
+										
+					"restitution": 0.5,
+					"density": 1.5
+				}
+			}
+		}
+	},
+	"pirate_explode": {
+		"nobody": true,
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/effects/explosion1.png",
+					"scale": 0.5
+				},
+				"animate": [
+				    {"action": "RotateBy",
+				     "duration": 0.5,
+					 "angleDeg": {"_t" : "random", "min": -120, "max": 120}
+					},
+					{"action": "ScaleBy",
+				     "duration": 0.5,
+				     "scale": 3
+					},
+				    {"action": "FadeTo",
+				     "duration": 0.4,
+				     "toOpacity": 0
+					},
+				    {"action": "Remove", "delay": 0.5, "removeThing": true}
+				]
+			},
+			"left": {
+				"layer": "main",
+				"opts": {
+					"file": "/resources/sprites/flyers/splinters/pirate_left.png",
+					"anchorPoint": {"x": 1, "y": 0}
+				},
+				"animate": [
+				    {"action": "MoveBy",
+				     "duration": 0.3,
+				     "location": {"x": -3, "y": {"_t": "random", "min": -3, "max": 3}}
+				    },
+				    {"action": "RotateBy",
+				     "duration": 0.3,
+					 "angleDeg": {"_t" : "random", "min": -30, "max": 30}
+					},
+				    {"action": "FadeTo",
+				     "duration": 0.3,
+				     "toOpacity": 0
+					}
+				]
+			},
+			"right": {
+				"layer": "main",
+				"opts": {
+					"file": "/resources/sprites/flyers/splinters/pirate_right.png",
+					"anchorPoint": {"x": -1, "y": 0}
+				},
+				"animate": [
+				    {"action": "MoveBy",
+				     "duration": 0.3,
+				     "location": {"x": 3, "y": {"_t": "random", "min": -3, "max": 3}}
+				    },
+				    {"action": "RotateBy",
+				     "duration": 0.3,
+					 "angleDeg": {"_t" : "random", "min": -30, "max": 30}
+					},
+				    {"action": "FadeTo",
+				     "duration": 0.3,
+				     "toOpacity": 0
+					}
+				]
+			}
+		}
+	},
+	"pirate": {
+		"direction": -1,
+		"nodes": {
+			"main": {
+				"opts": {
+					"file": "/resources/sprites/flyers/pirate.png",
+				}
+			}
+		},
+		"body": {
+			"linearVelocity": {"x": -1, "y": 0},
+			"type": "dynamic",
+			"angularDamping": 1.5,
+			"bullet": true,
+			"fixtures": {
+				"main": {
+					"material": "gum",
+					"shape": "PolygonShape",
+					"polygon": {
+						"vertices": [
+						    {"x": -2, "y": 0},
+						    {"x": -1.5, "y": -0.6},
+						    {"x": 1.5, "y": -0.6},
+						    {"x": 2, "y": 0},
+							{"x": 1.5, "y": 0.6},
+							{"x": -1.5, "y": 0.6}
+						]
+					},
+					"restitution": 0.5
+				}
+			}
+		},
+		"explosion": {
+			"splinters": [
+			    {"type": "crate1",
+			     "location": {"x": 0, "y": 0},
+			     "linearVelocity": {"x": 0, "y": 0}
+			    },
+			    {"type": "pirate_explode",
+			     "location": {"x": 0, "y": 0}
+			    }
+			]
+		}
+	}
+}

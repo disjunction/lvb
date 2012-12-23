@@ -5,7 +5,7 @@ var cocos  = require('cocos2d'),
     nodes  = cocos.nodes,
     geo    = require('pointExtension'),
     ccp    = geo.ccp,
-    jsein  = require('jsein'),
+    jsein    = require('jsein'),
 	Director = cocos.Director,
     Layer    = nodes.Layer,
     Point    = geo.Point;
@@ -16,14 +16,16 @@ var smog = require('smog');
 smog.app.config = require('/configs/development');
 
 var flame = require('flame'),
-	Flyer = require('./zp/entity/Flyer'),
 	Interactor = flame.viewport.Interactor;
 
+jsein.registerCtorLocator(require('./zp/util/ctorLocator'));
+
 var defRepo = new jsein.JsonRepo();
-defRepo.loadFile('/resources/data/zeps');
+defRepo.loadFile('/resources/data/flyers/zeps');
 defRepo.loadFile('/resources/data/ground');
 defRepo.loadFile('/resources/data/obstacles');
 defRepo.loadFile('/resources/data/effects');
+defRepo.loadFile('/resources/data/objects');
 defRepo.loadFile('/resources/data/backgrounds');
 
 /**
@@ -56,15 +58,14 @@ function Zp () {
 		this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
 	};
     
-    var zep = new Flyer('ZepSelf');
-    zep.location = ccp(2, 2);
-    
+	
+	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});
     this.fe.ego = this.protagonist.ego = zep;
-    this.fe.addFlyer(zep);
     
     this.initInteractor();
         
     this.scheduleUpdate();
+    window.parent.zp = this;
 }
 
 // Inherit from cocos.nodes.Layer
@@ -77,8 +78,14 @@ Zp.inherit(Layer, {
 	    
 	    var layout = {keys: {}};
 	    layout.keys[Interactor.ARROW_UP] = {type: 'state', state: 'up'};
+	    layout.keys[Interactor.SPACE] = [
+	                                     	{type: 'event', on: 'keyDown', event: 'fireGun'},
+	                                     	{type: 'event', on: 'keyUp', event: 'releaseGun'},
+	                                     	{type: 'state', state: 'chargeGun'}
+	                                     ];
 	    layout.keys[Interactor.LMB] = {type: 'state', state: 'up'};
 	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
+	    layout.keys[Interactor.KEY_D] = {type: 'event', on: 'keyUp', event: 'crates'};
 	    
 	    this.interactor = new Interactor({
 	    	layer: this,

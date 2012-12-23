@@ -1,7 +1,7 @@
 "use strict";
 
 var
-    geo      = require('pointExtension'),
+	geo      = require('pointExtension'),
     ccp      = geo.ccp,
 	flame    = require('flame');
 
@@ -19,22 +19,35 @@ function EffectFactory() {
 EffectFactory.prototype.throwSnow = function(p, fromX, toX, count) {
 	for (var i = 0; i < count; i++) {
 		var x = Math.random() * (toX - fromX) + fromX,
-			y = 20 + Math.random() * 10,
-			element = new flame.entity.Thing('snowflake');
+			y = 20 + Math.random() * 10;
 		
-		element.location = ccp(x, y);
-
-		p.fe.addThing(element);
-		p.fe.envision(element);
-		
-		if (p.viewport.animator) {
-			p.viewport.animator.fadeOutRemove(element.nodes.main, 5, 1, p.viewport.main);
-		}	
-		
-		setTimeout(function() {
-			p.fe.removeThing(this);
-		}.bind(element), 7000);
+		p.fe.spawnThing({type: 'snowflake', location: ccp(x,y)});
 	}
+};
+
+
+// tmp method (c-p from throwSnow)
+EffectFactory.prototype.throwCrates = function(p, fromX, toX, count) {
+	for (var i = 0; i < count; i++) {
+		var x = Math.random() * (toX - fromX) + fromX,
+			y = 20 + Math.random() * 10;
+		
+		p.fe.spawnThing({type: 'crate1', location: ccp(x,y)});
+	}
+};
+
+
+/**
+ * 
+ * @param Protagonist p
+ * @param Number fromX
+ * @param Number toX
+ * @param Number count
+ */
+EffectFactory.prototype.gunHit = function(p, gun, impact) {
+	var hitThing = new flame.entity.Thing(gun.hit.type);
+	hitThing.location = impact.impactPoint;
+	p.fe.envision(hitThing);
 };
 
 module.exports = EffectFactory;

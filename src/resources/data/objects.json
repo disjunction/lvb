@@ -1,0 +1,24 @@
+{
+	"crate1": {
+		"nodes": {
+			"obstacle": {
+				"opts": {
+					"file": "/resources/sprites/objects/crate1.png"
+				}
+			}
+		},
+		"body": {
+			"type": "dynamic",
+			"fixtures": {
+				"main": {
+					"material": "wood",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 1,
+						"height": 1
+					}
+				}
+			}
+		}
+	}
+}

@@ -71,7 +71,7 @@ FieldFactory.prototype.addZeps = function(opts) {
 
 	
 	for (var i = 0; i < 50; i++) {
-		var element = new flame.entity.Thing('pirate');
+		var element = new Flyer('pirate');
 			x += Math.random() * 7 + 3;
 		element.location = ccp(x, 12 + Math.random() * 7);
 		if (def.direction) element.direction = def.direction;
@@ -117,7 +117,6 @@ FieldFactory.prototype.addHouses = function(opts) {
 		
 	}
 };
-
 
 FieldFactory.prototype.make = function(opts) {
 	this.candids = [];

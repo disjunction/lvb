@@ -6,7 +6,7 @@ var path = require('../../../bootstrap').projectPath,
 
 exports.testNodesForZep = function(test) {
 	var defRepo = new jsein.JsonRepo();
-    defRepo.loadFile(path + '/resources/data/zeps');
+    defRepo.loadFile(path + '/resources/data/flyers/zeps');
 
     var p = flame.mock.makeProtagonist(),
     	nodeBuilder = new ThingNodeBuilder(p.viewport, defRepo),

@@ -7,6 +7,9 @@ exports.testMake = function(test) {
 	var defRepo = new jsein.JsonRepo();
 	defRepo.loadFile(path + '/resources/data/ground');
 	defRepo.loadFile(path + '/resources/data/obstacles');
+	defRepo.loadFile(path + '/resources/data/flyers/zeps');
+	defRepo.loadFile(path + '/resources/data/backgrounds');
+	defRepo.loadFile(path + '/resources/data/effects');
 	
 	var factory = new FieldFactory(defRepo),
 	    field = factory.make();
