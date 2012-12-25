@@ -30,6 +30,9 @@ function FieldEngine(field) {
     this.lastCleanup = Date.now();
     this.cleanupPeriod = 1000;
     
+    // defines distance the box is pickable
+    this.pickupVector = ccp(3, 3);
+    
     // one more ugly thing, used to bypass messaging between protagonist and fe
     this.ef = new EffectFactory();
 }
@@ -91,6 +94,18 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		};
 	},
 	
+	objectEventQueue: [],
+	
+	checkCratePickup: function(body) {
+		var p1 = body.GetPosition(),
+			p2 = this.ego.location;
+
+		if (Math.abs(p1.x - p2.x) < this.pickupVector.x &&
+			Math.abs(p1.y - p2.y) < this.pickupVector.y) {
+				this.objectEventQueue.push({type: 'gather', thing: body.thing});
+		}
+	},
+	
 	/**
 	 * additional physics for player-controlled zeppelin
 	 * @param body
@@ -122,6 +137,9 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 				break;
 			case 'snowflake':
 				this.preStepSnow(body);
+				break;
+			case 'crate1':
+				this.checkCratePickup(body);
 				break;
 				
 			}

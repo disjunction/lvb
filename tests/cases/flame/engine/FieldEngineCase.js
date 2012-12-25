@@ -3,6 +3,7 @@ var tests = require('../../../bootstrap'),
 	smog = require('smog'),
 	flame = require('flame'),
 	geo = require('pointExtension'),
+	ccp = geo.ccp,
 	jsein = require('jsein');
 
 exports.testBasic = function(test) {
@@ -110,5 +111,35 @@ exports.testSpawnThing = function(test) {
 	test.ok(thing.nodes.main); // envisioned
 	test.ok(thing.ii.length > 0); // thing added to field
 	test.ok(thing.bodyId.length > 0); // embodied
+	test.done();
+};
+
+exports.testFindBodiesInArea = function(test) {
+	var protagonist = flame.mock.makeProtagonist(),
+		defs = new jsein.JsonRepo(require(tests.testsPath + '/data/test_defs')),
+		opts = {
+			protagonist: protagonist,
+			defRepo: defs
+		},
+	    fe = new flame.engine.FieldEngine.make(opts),
+	    t0 = new flame.entity.Thing('ZepSelf'),
+	    t1 = new flame.entity.Thing('ZepSelf'),
+		t2 = new flame.entity.Thing('ZepSelf');
+	
+	// this will be skipped using excludes
+	t0.location = ccp(0,6.5);
+	fe.addThing(t0);
+	
+	// this will be found
+	t1.location = ccp(5,7);
+	fe.addThing(t1);
+	
+	// this is out of area
+	t2.location = ccp(10,7);
+	fe.addThing(t2);
+	
+	var bodies = fe.findBodiesInArea(ccp(0,0), ccp(6,7), [t0]);
+	test.equal(1, bodies.length);
+	test.equal(5, bodies[0].thing.location.x);
 	test.done();
 };

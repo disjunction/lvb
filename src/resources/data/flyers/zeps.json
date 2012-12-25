@@ -45,7 +45,11 @@
 					},
 										
 					"restitution": 0.5,
-					"density": 1.5
+					"density": 1.5,
+					
+					"filter": {
+						"categoryBits": 4
+					}
 				}
 			}
 		}
@@ -123,7 +127,7 @@
 		"nodes": {
 			"main": {
 				"opts": {
-					"file": "/resources/sprites/flyers/pirate.png",
+					"file": "/resources/sprites/flyers/pirate.png"
 				}
 			}
 		},
@@ -146,7 +150,11 @@
 							{"x": -1.5, "y": 0.6}
 						]
 					},
-					"restitution": 0.5
+					"restitution": 0.5,
+					
+					"filter": {
+						"categoryBits": 8
+					}
 				}
 			}
 		},

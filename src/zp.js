@@ -37,7 +37,7 @@ function Zp () {
     
     var fieldFactory = new(require('./zp/demiurge/FieldFactory'))(defRepo);
 
-	this.protagonist = flame.engine.Protagonist.make();
+	this.protagonist = flame.engine.Protagonist.make({ProtagonistClass: require('./zp/engine/Protagonist')});
     
 	var feOpts = {
 			'field': fieldFactory.make(),
