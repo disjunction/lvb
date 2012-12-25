@@ -1,0 +1,7 @@
+collision categories:
+ 0: 1 - ground
+ 1: 2 - obstacles
+ 2: 4 - player (s?)
+ 3: 8 - enemy flyers
+ 4: 16 - objects (crates)
+ 5: 32 - steam?
