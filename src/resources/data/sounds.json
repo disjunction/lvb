@@ -1,0 +1,14 @@
+{
+	"gutling_shot": {
+		"url": "./sound/effects/gutling_shot.ogg",
+		"volume": 0.1
+	},
+	"explosion1": {
+		"url": "./sound/effects/explosion1.ogg",
+		"volume": 0.2
+	},
+	"crate_pickup": {
+		"url": "./sound/effects/crate_pickup.wav",
+		"volume": 0.2
+	}
+}

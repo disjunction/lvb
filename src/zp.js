@@ -13,6 +13,7 @@ var cocos  = require('cocos2d'),
 // ZP bootstraping
   
 var smog = require('smog');
+smog.app.config = require('/configs/production');
 smog.app.config = require('/configs/development');
 
 var flame = require('flame'),
@@ -22,11 +23,14 @@ jsein.registerCtorLocator(require('./zp/util/ctorLocator'));
 
 var defRepo = new jsein.JsonRepo();
 defRepo.loadFile('/resources/data/flyers/zeps');
+defRepo.loadFile('/resources/data/puffs');
 defRepo.loadFile('/resources/data/ground');
 defRepo.loadFile('/resources/data/obstacles');
 defRepo.loadFile('/resources/data/effects');
 defRepo.loadFile('/resources/data/objects');
 defRepo.loadFile('/resources/data/backgrounds');
+defRepo.loadFile('/resources/data/stacks');
+
 
 /**
  * @class Initial application layer
@@ -50,15 +54,18 @@ function Zp () {
 		};
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
+    var soundRepo = new jsein.JsonRepo(require('/resources/data/sounds'));
+    this.protagonist.viewport.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
+    
+    
     this.protagonist.viewport.addLayersTo(this);
     this.protagonist.viewport.makeAnimator();
-    this.protagonist.viewport.scaleCameraTo(0.5, 5);
+    this.protagonist.viewport.scaleCameraTo(0.5, 0.5);
     
     this.protagonist.viewport.moveCameraTo = function(point) {
 		this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
 	};
     
-	
 	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});
     this.fe.ego = this.protagonist.ego = zep;
     

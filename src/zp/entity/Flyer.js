@@ -2,7 +2,7 @@
 
 var
 	box2d  = require('box2d'),
-	geo    = require('geometry'),
+	geo    = require('pointExtension'),
 	flame  = require('flame'),
 	Gun  = require('./Gun'),
 	ccp    = geo.ccp;

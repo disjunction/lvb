@@ -5,6 +5,7 @@ var
     ccp      = geo.ccp,
     jsein    = require('jsein'),
 	flame    = require('flame'),
+	box2d    = require('box2d'),
 	Intpacker = require('Intpacker'),
 	EffectFactory = require('../demiurge/EffectFactory');
 
@@ -21,7 +22,7 @@ function FieldEngine(field) {
     this.roof = 19;
     
     // from which distance ahead of ego to load objects
-    this.lookAhead = 30;
+    this.lookAhead = 50;
 
     // after which distance objects can be cleaned up
     this.lookBehind = 20;
@@ -29,6 +30,10 @@ function FieldEngine(field) {
     // ugly solution but it creates less possible conflicts
     this.lastCleanup = Date.now();
     this.cleanupPeriod = 1000;
+    
+    // reduces CPU load calculating collisions with the clouds
+    this.lastCloudCheck = Date.now();
+    this.cloudCheckPeriod = 200;
     
     // defines distance the box is pickable
     this.pickupVector = ccp(3, 3);
@@ -42,7 +47,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		this.addThing(flyer);
 		this.nodeBuilder.envision(flyer);
 	},
-	
+		
 	// lazy loading of nodes and bodies
 	checkMaterialize: function() {
 		while (true) {
@@ -50,8 +55,12 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 				a = this.field.get(index);
 			if (a && a.location.x - this.lookAhead < this.ego.location.x) {
 				if (!a.bodyId) {
-					this.addThing(a);
-					this.nodeBuilder.envision(a);
+					if (a.type == 'cloud') {
+						this.ef.materializeCloud(a, this);
+					} else {
+						this.addThing(a);
+						this.envision(a);
+					}					
 				}
 				this.pointer++;
 			} else {
@@ -116,14 +125,57 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		} else {
 			body.ApplyForce(ccp(0, -15), body.GetPosition());
 		}
+
+		var time = Date.now();
+		
+		if (this.groups.puffs && time - this.lastCloudCheck > this.cloudCheckPeriod) {
+			this.lastCloudCheck = time;
+			
+			var impact = 1000;
+			
+			for (var ii in this.groups.puffs) {
+				var puff = this.groups.puffs[ii],
+					sqD = geo.ccpLengthSQ(geo.ccpSub(body.thing.location, puff.location));
+				
+				// distance between centers is less than 4
+				if (sqD < 25) {
+					var shape1 = new box2d.b2CircleShape(puff.radius * puff.scale),
+						t1 = new box2d.b2Transform,
+						t2 = new box2d.b2Transform;
+					
+					t1.position.Set(puff.location.x, puff.location.y);
+					t2.position.Set(body.thing.location.x, body.thing.location.y);
+					
+					if (box2d.b2Shape.TestOverlap(shape1, t1, body.GetFixtureList().GetShape(), t2)) {
+						if (puff.dissolveTime) {
+							puff.friction = 1 - puff.age / puff.dissolveTime + 0.01; 
+						}
+						var candidImpact = 0.05 / puff.friction / puff.friction * sqD;
+						if (candidImpact < impact) impact = candidImpact;
+					}
+				}
+			}
+			
+			if (impact < 1000) {
+				var v = body.GetLinearVelocity();
+				if (Math.abs(v.x) > impact) v.x = impact * geo.sign(v.x);
+				if (Math.abs(v.y) > impact) v.y = impact * geo.sign(v.y);
+			}
+		}
 	},
 	
 	preStepSnow: function(body) {
 		body.ApplyForce(ccp(0, 0.2), body.thing.location);
 	},
 	
-	preStep: function() {
-		FieldEngine.superclass.preStep.call(this);
+	preStepPuffs: function(delta) {
+		for (var k in this.groups.puffs) {
+			this.groups.puffs[k].growOlder(delta);
+		}
+	},
+	
+	preStep: function(delta) {
+		FieldEngine.superclass.preStep.call(this, delta);
 		
 		this.checkMaterialize();
 		
@@ -141,13 +193,19 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			case 'crate1':
 				this.checkCratePickup(body);
 				break;
-				
+			case 'stack01':
+				body.thing.checkPuff(this);
+				break;
 			}
 			
 			// if someone with controller attached... hm? you?
 			if (body.thing.state) {
 				this.preStepPlayerZep(body);
 			}
+		}
+		
+		if (this.groups.puffs) {
+			this.preStepPuffs(delta);
 		}
 	},
 	
@@ -178,6 +236,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			throw new Error('explosion.splinters must be array in thing def ' + thing.type);
 		}
 		this.removeThing(thing);
+		this.nodeBuilder.viewport.play('explosion1');
 		for (var i in def.explosion.splinters) {
 			var spawnDef = jsein.clone(def.explosion.splinters[i]);
 			spawnDef.location = geo.ccpAdd(thing.location, spawnDef.location);

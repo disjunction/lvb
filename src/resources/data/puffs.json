@@ -1,0 +1,26 @@
+{
+	"puff01": {
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/puffs/puff01.png",
+					//"opacity": 180
+				}
+			}
+		}
+/*
+,
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"radius": 2.25,
+					"filter": {
+						"categoryBits": 32,
+						"maskBits": 0
+					}
+				}
+			}
+		} */
+	}
+}

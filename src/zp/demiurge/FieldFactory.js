@@ -4,7 +4,10 @@ var
     geo      = require('pointExtension'),
     ccp      = geo.ccp,
 	flame    = require('flame'),
-	Flyer    = require('../entity/Flyer');
+	Flyer    = require('../entity/Flyer'),
+	Puff     = require('../entity/Puff'),
+	Cloud    = require('../entity/Cloud'),
+	Stack    = require('../entity/Stack');
 
 function FieldFactory(defRepo) {
 	this.defRepo = defRepo;
@@ -79,6 +82,49 @@ FieldFactory.prototype.addZeps = function(opts) {
 	}
 };
 
+FieldFactory.prototype.addPuffs = function(opts) {
+	var x = 10,
+		y = 7;
+	for (var i = 0; i < 5; i++) {
+		var element = new Puff('puff01');
+		
+		element.location = ccp(x,y + Math.random() * 4);
+		element.type = 'puff01';
+		element.hSpeed = this.field.wind.x;
+		element.vTop = 10;
+		element.vFactor = 0.1;
+		element.aSpeed = 0.5;
+		element.sSpeed = 0.1;
+		element.dissolveTime = 10;
+		this.candids.push(element);		
+		x += 5;
+	}
+};
+
+FieldFactory.prototype.addClouds = function(opts) {
+	var x = 10;
+	
+	for (var i = 0; i < 30; i++) {
+		var y = 14 + Math.random() * 8,
+			cloud = new Cloud;
+		cloud.location = ccp(x, y);
+		this.candids.push(cloud);	
+		x += Math.random() * 20 + 5;
+	}
+};
+
+FieldFactory.prototype.addStacks = function(opts) {
+	var x = 10 + Math.random() * 10;
+	
+	for (var i = 0; i < 30; i++) {
+		var y = 4.6,
+			element = new Stack;
+		element.location = ccp(x, y);
+		this.candids.push(element);	
+		x += Math.random() * 20 + 15;
+	}
+};
+
 FieldFactory.prototype.addHouses = function(opts) {
 	var x = 10,
 	    y = 0.9,
@@ -122,10 +168,16 @@ FieldFactory.prototype.make = function(opts) {
 	this.candids = [];
 	this.field = new flame.entity.Field;
 	
+	// meters / second for puffs
+	this.field.wind = ccp(-1, 0);
+	
 	this.addGround(opts);
 	this.addHouses(opts);
 	this.addBackgrounds(opts);
 	this.addZeps(opts);
+	//this.addPuffs(opts);
+	this.addClouds(opts);
+	this.addStacks(opts);
 	
 	// sort prepared elements by X, so that they can be envisioned and embodied 
 	// only at the moment when player reaches a certain point

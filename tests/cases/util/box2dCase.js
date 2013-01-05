@@ -1,3 +1,5 @@
+"use strict";
+
 var  path = require('../../bootstrap').projectPath,
      box2d = require('box2d'),
      geo = require('pointExtension');
@@ -107,10 +109,8 @@ exports.testRayCast = function(test) {
     };
     
     
-    var r = world.RayCast(cb, box2d.b2Vec2(20,1), box2d.b2Vec2(-20,1));
-    console.log(r);
-    
-    var transform = new box2d.b2Transform();
+    var r = world.RayCast(cb, box2d.b2Vec2(20,1), box2d.b2Vec2(-20,1)),
+    	transform = new box2d.b2Transform();
     transform.SetIdentity();
     
     var input = new box2d.b2RayCastInput;
@@ -122,7 +122,7 @@ exports.testRayCast = function(test) {
 
     var shape = b2.GetFixtureList(); 
         
-    var hit = shape.RayCast(output, input,transform);    
+    var hit = shape.RayCast(output, input, transform);    
 	test.done();
 };
 
@@ -153,3 +153,24 @@ exports.testSettingCollisionFilters = function(test) {
     test.equal(65535 - 2, b1.GetFixtureList().GetFilterData().maskBits);
     test.done();
 };
+
+exports.testShapeTestOverlap = function(test) {
+    
+    var shape1 = new box2d.b2PolygonShape;
+    shape1.SetAsBox(1, 1);
+    var t1 = new box2d.b2Transform;
+    t1.position.Set(1, 1);
+
+    var shape2 = new box2d.b2CircleShape(2);
+    var t2 = new box2d.b2Transform;
+    t2.position.Set(2, 2);
+    
+    var t3 = new box2d.b2Transform;
+    t3.position.Set(5, 5);
+
+    test.ok(box2d.b2Shape.TestOverlap(shape1, t1, shape2, t2));
+    test.ok(! box2d.b2Shape.TestOverlap(shape1, t1, shape2, t3));
+
+    test.done();
+};
+

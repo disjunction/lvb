@@ -22,6 +22,7 @@ InteractionApplier.inherit(flame.viewport.Interactor.ProtagonistApplier, {
 			break;
 		case 'fireGun':
 			this.p.fe.tryShot(this.p.ego, this.p);
+			this.p.viewport.play('gutling_shot');
 			break;
 		}		
 	},
