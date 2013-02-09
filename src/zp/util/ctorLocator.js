@@ -1,5 +1,5 @@
 var	container = {
-		Flyer: require('../entity/Flyer')
+		Flier: require('../entity/Flier')
 	};
 
 function ctorLocator(name) {

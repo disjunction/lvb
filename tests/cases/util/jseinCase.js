@@ -75,7 +75,7 @@ exports.testCtorLocators = function(test) {
 	var tmp = jsein.ctorLocators;
 	jsein.ctorLocators = [];
 	jsein.registerCtorLocator(require(path + '/zp/util/ctorLocator'));
-	var data = {some: 'world', _t: 'Flyer'};
+	var data = {some: 'world', _t: 'Flier'};
 	var o = jsein.recover(data);
 	
 	test.equals('world', o.some);

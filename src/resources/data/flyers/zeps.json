@@ -1,6 +1,6 @@
 {
 	"ZepSelf": {
-		"className": "Flyer",
+		"className": "Flier",
 	    "nodes": {
 		    "main": {
 		    	"type": "animatedSprite",

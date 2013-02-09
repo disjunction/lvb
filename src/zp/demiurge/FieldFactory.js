@@ -4,7 +4,7 @@ var
     geo      = require('pointExtension'),
     ccp      = geo.ccp,
 	flame    = require('flame'),
-	Flyer    = require('../entity/Flyer'),
+	Flier    = require('../entity/Flier'),
 	Puff     = require('../entity/Puff'),
 	Cloud    = require('../entity/Cloud'),
 	Stack    = require('../entity/Stack');
@@ -74,7 +74,7 @@ FieldFactory.prototype.addZeps = function(opts) {
 
 	
 	for (var i = 0; i < 50; i++) {
-		var element = new Flyer('pirate');
+		var element = new Flier('pirate');
 			x += Math.random() * 7 + 3;
 		element.location = ccp(x, 12 + Math.random() * 7);
 		if (def.direction) element.direction = def.direction;

@@ -43,7 +43,7 @@ function FieldEngine(field) {
 }
 
 FieldEngine.inherit(flame.engine.FieldEngine, {
-	addFlyer: function(flyer) {
+	addFlier: function(flyer) {
 		this.addThing(flyer);
 		this.nodeBuilder.envision(flyer);
 	},
@@ -69,7 +69,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		}
 	},
 	
-	explodeFlyer: function(flyer) {
+	explodeFlier: function(flyer) {
 		if (!flyer.explodeThings) {
 			throw new Error('flyer ' + flyer.type + ' has no explodeThings defined');
 		}

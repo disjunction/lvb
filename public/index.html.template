@@ -27,8 +27,9 @@
         </style>
     </head>
     <body>
-        <a href="chill.out.html">chill out</a>
-        <div class="cocos2d-app">
+        <a href="#" onclick="document.getElementById('cocos2dView').innerHTML = '';zp.unscheduleUpdate()">chill out</a> | 
+        <a href="some">go away</a>
+        <div class="cocos2d-app" id="cocos2dView">
             Loading Zp...
             ${scripts}
         </div>
