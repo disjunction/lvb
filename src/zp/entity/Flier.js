@@ -16,7 +16,9 @@ function Flier(opts) {
 }
 
 Flier.inherit(flame.entity.Movable, {
-
+	_crates: 0,
+	set crates(v) {	this.setter('crates', v);},
+	get crates() { return this._crates; }
 });
 
 module.exports = Flier;

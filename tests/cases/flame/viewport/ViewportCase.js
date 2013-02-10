@@ -9,7 +9,7 @@ var path = require('../../../bootstrap').projectPath,
 exports.testBasic = function(test) {
 	var director = new Director(),
 		nodeFactory = new NodeFactory(smog.app.config),
-		viewport = flame.viewport.Viewport(nodeFactory, director);
+		viewport = new flame.viewport.Viewport(nodeFactory, director);
 		
 	test.done();
 };

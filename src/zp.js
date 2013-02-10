@@ -54,22 +54,10 @@ function Zp () {
 		};
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
-    var soundRepo = new jsein.JsonRepo(require('/resources/data/sounds'));
-    this.protagonist.viewport.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
-    
-    
-    this.protagonist.viewport.addLayersTo(this);
-    this.protagonist.viewport.makeAnimator();
-    this.protagonist.viewport.scaleCameraTo(0.5, 0.5);
-    
-    this.protagonist.viewport.moveCameraTo = function(point) {
-		this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
-	};
-    
 	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});
-    this.fe.ego = this.protagonist.ego = zep;
     
-    this.initInteractor();
+    this.setupProtagonist(this.protagonist, zep);
+    this.setupInteractor();
         
     this.scheduleUpdate();
     window.parent.zp = this;
@@ -77,7 +65,29 @@ function Zp () {
 
 // Inherit from cocos.nodes.Layer
 Zp.inherit(Layer, {
-	initInteractor: function() {
+	setupProtagonist: function(p, zep) {
+		p.ego = p.fe.ego = zep;
+
+		var v = p.viewport;
+		
+		var hudBuilder = new flame.viewport.hud.HudBuilder(v, defRepo),
+			EgoHud = require('./zp/viewport/hud/EgoHud'),
+			egoHud = new EgoHud({hudBuilder: hudBuilder, viewport: v, ego: zep});
+		p.egoHud = egoHud;
+		
+		var soundRepo = new jsein.JsonRepo(require('/resources/data/sounds'));
+		v.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
+		
+	    v.addLayersTo(this);
+	    v.makeAnimator();
+	    v.scaleCameraTo(0.5, 0.5);
+	    
+	    v.moveCameraTo = function(point) {
+			this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
+		};
+	},
+	
+	setupInteractor: function() {
 		var Applier = require('./zp/viewport/InteractionApplier'),
 		    applier = new Applier({
 		    	protagonist: this.protagonist

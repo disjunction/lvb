@@ -112,6 +112,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		if (Math.abs(p1.x - p2.x) < this.pickupVector.x &&
 			Math.abs(p1.y - p2.y) < this.pickupVector.y) {
 				this.objectEventQueue.push({type: 'gather', thing: body.thing});
+				this.ego.crates++; // this should call the EgoHud (via Observer)
 		}
 	},
 	
