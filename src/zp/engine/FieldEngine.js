@@ -40,6 +40,9 @@ function FieldEngine(field) {
     
     // one more ugly thing, used to bypass messaging between protagonist and fe
     this.ef = new EffectFactory();
+    
+    // speed handicap for Puff friction
+    this.puffFactor = 20;
 }
 
 FieldEngine.inherit(flame.engine.FieldEngine, {
@@ -127,7 +130,8 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			body.ApplyForce(ccp(0, -15), body.GetPosition());
 		}
 
-		var time = Date.now();
+		var time = Date.now(),
+			v = body.GetLinearVelocity();
 		
 		if (this.groups.puffs && time - this.lastCloudCheck > this.cloudCheckPeriod) {
 			this.lastCloudCheck = time;
@@ -158,11 +162,12 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			}
 			
 			if (impact < 1000) {
-				var v = body.GetLinearVelocity();
-				if (Math.abs(v.x) > impact) v.x = impact * geo.sign(v.x);
-				if (Math.abs(v.y) > impact) v.y = impact * geo.sign(v.y);
+				if (Math.abs(v.x) > impact + this.puffFactor) v.x = impact * geo.sign(v.x);
+				if (Math.abs(v.y) > impact + this.puffFactor) v.y = impact * geo.sign(v.y);
 			}
 		}
+
+		body.thing.velocity = Math.floor(v.x * 10) / 10;
 	},
 	
 	preStepSnow: function(body) {
@@ -174,11 +179,23 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			this.groups.puffs[k].growOlder(delta);
 		}
 	},
+
+	preStepBadGuy: function(delta) {
+	    this.field.badguy.move(delta);
+	    this.updateThingNodes(this.field.badguy);
+	    this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
+	    
+	    if (this.ego.distance <= 2 && !this.ego.dead) {
+	    	this.explodeThing(this.ego, this.protagonist);
+	    	this.protagonist.gameOver();
+	    }
+	},
 	
 	preStep: function(delta) {
 		FieldEngine.superclass.preStep.call(this, delta);
 		
 		this.checkMaterialize();
+		this.preStepBadGuy(delta);
 		
 		for (var key in this.items) {
 			var body = this.items[key];

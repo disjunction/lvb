@@ -29,6 +29,19 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	setFieldEngine: function(fe) {
 		Protagonist.superclass.setFieldEngine.call(this, fe);
 		fe.preStepPlugins.push(this.processObjectEventQueue.bind(this));
+	},
+	
+	gameOver: function() {
+		this.ego.dead = true;
+		var label = this.viewport.nf.makeLabel({
+			string: 'Game Over, baby ;)',
+			fontSize: 40,
+			fontName: 'Serif',
+			fontColor: '#770000'
+		});
+		label.anchorPoint = ccp(0.5, 0.5);
+		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);
+		this.viewport.hud.addChild(label);
 	}
 });
 

@@ -1,0 +1,11 @@
+{
+	"gameOver": {
+		"nodes": {
+			"target": {
+				"opts": {
+					"file": "/resources/sprites/badguy.png",
+				}
+			}
+		}
+	}
+}

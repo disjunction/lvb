@@ -13,7 +13,7 @@ function Stack(opts) {
 	this.group = 'stacks';
 	this.puffOpts = {
 		type: 'puff01',
-		dissolveTime: 10+ Math.random() * 10,
+		dissolveTime: 10 + Math.random() * 10,
 		vFactor: 0.3,
 		vTop: 8 + Math.random() * 5,
 		sSpeed: 0.15,

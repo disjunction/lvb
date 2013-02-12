@@ -23,6 +23,7 @@ jsein.registerCtorLocator(require('./zp/util/ctorLocator'));
 
 var defRepo = new jsein.JsonRepo();
 defRepo.loadFile('/resources/data/flyers/zeps');
+defRepo.loadFile('/resources/data/badguy');
 defRepo.loadFile('/resources/data/puffs');
 defRepo.loadFile('/resources/data/ground');
 defRepo.loadFile('/resources/data/obstacles');
@@ -30,7 +31,6 @@ defRepo.loadFile('/resources/data/effects');
 defRepo.loadFile('/resources/data/objects');
 defRepo.loadFile('/resources/data/backgrounds');
 defRepo.loadFile('/resources/data/stacks');
-
 
 /**
  * @class Initial application layer
@@ -67,6 +67,7 @@ function Zp () {
 Zp.inherit(Layer, {
 	setupProtagonist: function(p, zep) {
 		p.ego = p.fe.ego = zep;
+		p.fe.protagonist = p; // backlink from fe to protagonist is bad :(
 
 		var v = p.viewport;
 		
@@ -83,7 +84,7 @@ Zp.inherit(Layer, {
 	    v.scaleCameraTo(0.5, 0.5);
 	    
 	    v.moveCameraTo = function(point) {
-			this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 4), 0);
+			this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 6), 10);
 		};
 	},
 	

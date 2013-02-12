@@ -1,0 +1,11 @@
+{
+	"badguy": {
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/badguy.png",
+				}
+			}
+		}
+	}
+}

@@ -52,6 +52,13 @@
 					}
 				}
 			}
+		},
+		"explosion": {
+			"splinters": [
+			    {"type": "pirate_explode",
+			     "location": {"x": 0, "y": 0}
+			    }
+			]
 		}
 	},
 	"pirate_explode": {

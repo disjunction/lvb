@@ -2,5 +2,10 @@
 	"ppm": 36,
 	"extras": {
 		"baseUrl": "http://zp.local"
+	},
+	"nodeFactory": {
+		"fontName": "Serif",
+		"fontSize": "12",
+		"fontColor": "#ffdd99"
 	}
 }

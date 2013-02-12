@@ -7,7 +7,8 @@ var
 	Flier    = require('../entity/Flier'),
 	Puff     = require('../entity/Puff'),
 	Cloud    = require('../entity/Cloud'),
-	Stack    = require('../entity/Stack');
+	Stack    = require('../entity/Stack'),
+	BadGuy   = require('../entity/BadGuy');
 
 function FieldFactory(defRepo) {
 	this.defRepo = defRepo;
@@ -164,6 +165,8 @@ FieldFactory.prototype.addHouses = function(opts) {
 	}
 };
 
+
+
 FieldFactory.prototype.make = function(opts) {
 	this.candids = [];
 	this.field = new flame.entity.Field;
@@ -178,6 +181,10 @@ FieldFactory.prototype.make = function(opts) {
 	//this.addPuffs(opts);
 	this.addClouds(opts);
 	this.addStacks(opts);
+	
+	this.field.badguy = new BadGuy();
+	this.field.badguy.location = ccp(-10, 5);
+	this.candids.push(this.field.badguy);
 	
 	// sort prepared elements by X, so that they can be envisioned and embodied 
 	// only at the moment when player reaches a certain point
