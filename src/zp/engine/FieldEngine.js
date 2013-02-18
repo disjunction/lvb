@@ -42,7 +42,7 @@ function FieldEngine(field) {
     this.ef = new EffectFactory();
     
     // speed handicap for Puff friction
-    this.puffFactor = 20;
+    this.puffFactor = 0;
 }
 
 FieldEngine.inherit(flame.engine.FieldEngine, {
@@ -185,9 +185,22 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    this.updateThingNodes(this.field.badguy);
 	    this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
 	    
-	    if (this.ego.distance <= 2 && !this.ego.dead) {
-	    	this.explodeThing(this.ego, this.protagonist);
-	    	this.protagonist.gameOver();
+	    if (this.ego.distance <= 2 && !this.ego.dead && !this.badguyZepLaser) {
+	        var laser = new flame.entity.Stretcher('red_laser');
+	        laser.locked = true;
+	    	laser.stretch.start.thing = this.field.badguy;
+	    	laser.stretch.start.anchor = {point: ccp(-0.7, 2.9)};
+	    	laser.stretch.end.thing = this.ego;
+	    	this.addThing(laser);
+	    	this.envision(laser);
+	    	
+	    	this.badguyZepLaser = laser;
+	    	
+	    	setTimeout((function(){
+		    	this.explodeThing(this.ego, this.protagonist);
+		    	this.protagonist.gameOver();
+		    	this.removeThing(this.badguyZepLaser);
+	    	}).bind(this), 1500);
 	    }
 	},
 	

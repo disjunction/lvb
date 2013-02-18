@@ -1,7 +1,7 @@
 {
 	"badguy": {
 		"nodes": {
-			"stuff": {
+			"obstacle": {
 				"opts": {
 					"file": "/resources/sprites/badguy.png",
 				}

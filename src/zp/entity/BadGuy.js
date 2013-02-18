@@ -1,7 +1,6 @@
 "use strict";
 
-var	flame  = require('flame'),
-	smog   = require('flame')
+var	flame  = require('flame');
 
 function BadGuy(opts) {
 	BadGuy.superclass.constructor.call(this, opts);

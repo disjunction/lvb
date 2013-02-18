@@ -66,5 +66,15 @@
 				]
 			}
 		}
+	},
+	"red_laser": {
+		"nobody": true,
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/effects/red_laser.png"
+				}
+			}
+		}
 	}
 }

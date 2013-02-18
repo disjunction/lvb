@@ -54,11 +54,11 @@ function Zp () {
 		};
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
-	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});
+	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});	
     
     this.setupProtagonist(this.protagonist, zep);
     this.setupInteractor();
-        
+    
     this.scheduleUpdate();
     window.parent.zp = this;
 }
