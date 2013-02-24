@@ -1,9 +1,11 @@
 "use strict";
 
 var
-    geo      = require('pointExtension'),
-    ccp      = geo.ccp,
-    flame     = require('flame');
+    geo        = require('pointExtension'),
+    ccp        = geo.ccp,
+    flame      = require('flame'),
+    Interactor = flame.viewport.Interactor,
+    jsein      = require('jsein');
 
 function Protagonist(viewport) {
 	Protagonist.superclass.constructor.call(this, viewport);
@@ -29,6 +31,67 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	setFieldEngine: function(fe) {
 		Protagonist.superclass.setFieldEngine.call(this, fe);
 		fe.preStepPlugins.push(this.processObjectEventQueue.bind(this));
+		
+		var zep = fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});	
+		this.setEgo(zep);
+		fe.protagonist = this; // backlink from fe to protagonist is bad :(
+
+		var hudBuilder = new flame.viewport.hud.HudBuilder(this.viewport, fe.defRepo),
+			EgoHud = require('../viewport/hud/EgoHud'),
+			egoHud = new EgoHud({hudBuilder: hudBuilder, viewport: this.viewport, ego: zep});
+		this.egoHud = egoHud;
+		
+		var soundRepo = new jsein.JsonRepo(require('../../resources/data/sounds'));
+		this.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
+		
+	    this.viewport.makeAnimator();
+	    this.viewport.scaleCameraTo(0.5, 1);
+	    
+	    /*
+	    var cameraTop = 10.5;
+	    p.syncCamera = function() {};
+	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
+	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
+*/	  
+	    
+	    setTimeout((function(){
+		    this.syncCamera = function() {
+				var body = this.fe.get(this.ego.bodyId);
+				if (body) {
+					var point = this.location2position(body.GetPosition());
+					point = geo.ccp(Math.floor(-point.x * this.viewport.scale + this.viewport.size.width / 6), 10);
+					this.viewport.scrolled.position = point;
+				}
+		    };
+	    }).bind(this), 0);
+	    		
+	},
+	
+	setLayer: function(layer) {
+		Protagonist.superclass.setLayer.call(this, layer);
+		
+		var Applier = require('../viewport/InteractionApplier'),
+	    applier = new Applier({
+	    	protagonist: this
+	    });
+    
+	    var layout = {keys: {}};
+	    layout.keys[Interactor.ARROW_UP] = {type: 'state', state: 'up'};
+	    layout.keys[Interactor.SPACE] = [
+	                                     	{type: 'event', on: 'keyDown', event: 'fireGun'},
+	                                     	{type: 'event', on: 'keyUp', event: 'releaseGun'},
+	                                     	{type: 'state', state: 'chargeGun'}
+	                                     ];
+	    layout.keys[Interactor.LMB] = {type: 'state', state: 'up'};
+	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
+	    layout.keys[Interactor.KEY_D] = {type: 'event', on: 'keyUp', event: 'crates'};
+	    
+	    this.interactor = new Interactor({
+	    	layer: layer,
+	    	applier: applier,
+	    	layout: layout
+	    });
+	    this.interactor.afterInteract();
 	},
 	
 	gameOver: function() {

@@ -52,86 +52,14 @@ function Zp () {
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
     this.protagonist = flame.engine.Protagonist.make({ProtagonistClass: require('./zp/engine/Protagonist'),
-    												  fieldEngine: this.fe
-    												  });
-        
-    this.setupProtagonist(this.protagonist);
-    this.setupInteractor();
-    
+    												  fieldEngine: this.fe,
+    												  layer: this});
     this.scheduleUpdate();
     window.parent.zp = this;
 }
 
 // Inherit from cocos.nodes.Layer
-Zp.inherit(Layer, {
-	setupProtagonist: function(p, zep) {
-		var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});	
-		p.setEgo(zep);
-		p.fe.protagonist = p; // backlink from fe to protagonist is bad :(
-
-		var v = p.viewport;
-		
-		var hudBuilder = new flame.viewport.hud.HudBuilder(v, defRepo),
-			EgoHud = require('./zp/viewport/hud/EgoHud'),
-			egoHud = new EgoHud({hudBuilder: hudBuilder, viewport: v, ego: zep});
-		p.egoHud = egoHud;
-		
-		var soundRepo = new jsein.JsonRepo(require('/resources/data/sounds'));
-		v.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
-		
-	    v.addLayersTo(this);
-	    v.makeAnimator();
-	    v.scaleCameraTo(0.5, 5);
-
-/*
-	    var cameraTop = 10.5;
-	    p.syncCamera = function() {};
-	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
-	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
-*/	    
-
-	    setTimeout((function(){
-		    p.syncCamera = function() {
-				var body = this.fe.get(this.ego.bodyId);
-				if (body) {
-					var point = this.location2position(body.GetPosition());
-					point = geo.ccp(Math.floor(-point.x * this.viewport.scale + this.viewport.size.width / 6), 10);
-					this.viewport.scrolled.position = point;
-				}
-		    };
-	    }).bind(this), 0);
-	    
-	    /*
-	    v.moveCameraTo = function(point) {
-			this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 6), 10);
-		};
-		*/
-	},
-	
-	setupInteractor: function() {
-		var Applier = require('./zp/viewport/InteractionApplier'),
-		    applier = new Applier({
-		    	protagonist: this.protagonist
-		    });
-	    
-	    var layout = {keys: {}};
-	    layout.keys[Interactor.ARROW_UP] = {type: 'state', state: 'up'};
-	    layout.keys[Interactor.SPACE] = [
-	                                     	{type: 'event', on: 'keyDown', event: 'fireGun'},
-	                                     	{type: 'event', on: 'keyUp', event: 'releaseGun'},
-	                                     	{type: 'state', state: 'chargeGun'}
-	                                     ];
-	    layout.keys[Interactor.LMB] = {type: 'state', state: 'up'};
-	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
-	    layout.keys[Interactor.KEY_D] = {type: 'event', on: 'keyUp', event: 'crates'};
-	    
-	    this.interactor = new Interactor({
-	    	layer: this,
-	    	applier: applier,
-	    	layout: layout
-	    });
-	    this.interactor.afterInteract();
-	},
+Zp.inherit(Layer, {	
 	update: function(dt) {
 		this.fe.step();
 		this.protagonist.syncCamera();
