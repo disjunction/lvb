@@ -214,7 +214,6 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    }
 	    
 	    if ((this.field.goodguy.location.x - this.field.badguy.location.x < 18) && !this.finalLaser) {
-	    	console.log('game won condition');
 	    	// i'm evil copy-pase ]:-]
 	    	var laser = new flame.entity.Stretcher('red_laser');
 	        laser.locked = true;
@@ -237,7 +236,6 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    }
 	    
 	    if (this.field.goodguy.location.x - this.ego.location.x < 2 && !this.finalLaser) {
-	    	console.log('teleportation');
 	    	this.field.badguy.location.x = this.field.goodguy.location.x - 17.5;
 	    }
 	},

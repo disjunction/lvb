@@ -98,7 +98,6 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	gameOver: function() {
 		this.ego.dead = true;
 		this.fe.field.badguy.stop();
-		console.log('here');
 		var label = this.viewport.nf.makeLabel({
 			string: 'Game Over, baby ;)',
 			fontSize: 40,
