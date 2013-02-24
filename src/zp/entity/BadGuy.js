@@ -16,8 +16,13 @@ function BadGuy(opts) {
 BadGuy.inherit(flame.entity.Movable, {
 	move: function(delta) {
 		this.speed < this.maxSpeed && (this.speed += this.acceleration * delta);
+		if (this.speed < 0) this.speed = 0;
 		this.location.x += this.speed * delta;
-	} 
+	},
+	stop: function() {
+		this.acceleration = -2;
+		this.maxSpeed = 100;
+	}
 });
 
 module.exports = BadGuy;

@@ -30,6 +30,7 @@ function FieldEngine(field) {
     // ugly solution but it creates less possible conflicts
     this.lastCleanup = Date.now();
     this.cleanupPeriod = 1000;
+    this.cleanupEnabled = true;
     
     // reduces CPU load calculating collisions with the clouds
     this.lastCloudCheck = Date.now();
@@ -43,6 +44,9 @@ function FieldEngine(field) {
     
     // speed handicap for Puff friction
     this.puffFactor = 0;
+    
+    // stretcher showing badguy-zep or goodguy-badguy laser shot in the end of the game
+    this.finalLaser = null;
 }
 
 FieldEngine.inherit(flame.engine.FieldEngine, {
@@ -69,12 +73,6 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			} else {
 				return;
 			}
-		}
-	},
-	
-	explodeFlier: function(flyer) {
-		if (!flyer.explodeThings) {
-			throw new Error('flyer ' + flyer.type + ' has no explodeThings defined');
 		}
 	},
 	
@@ -129,7 +127,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		} else {
 			body.ApplyForce(ccp(0, -15), body.GetPosition());
 		}
-
+		
 		var time = Date.now(),
 			v = body.GetLinearVelocity();
 		
@@ -180,12 +178,16 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 		}
 	},
 
+	/**
+	 * move bad guy and caclulate gae over situation
+	 * @param float delta
+	 */
 	preStepBadGuy: function(delta) {
 	    this.field.badguy.move(delta);
 	    this.updateThingNodes(this.field.badguy);
 	    this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
 	    
-	    if (this.ego.distance <= 2 && !this.ego.dead && !this.badguyZepLaser) {
+	    if (this.ego.distance <= 2 && !this.ego.dead && !this.finalLaser) {
 	        var laser = new flame.entity.Stretcher('red_laser');
 	        laser.locked = true;
 	    	laser.stretch.start.thing = this.field.badguy;
@@ -194,13 +196,49 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    	this.addThing(laser);
 	    	this.envision(laser);
 	    	
-	    	this.badguyZepLaser = laser;
+	    	this.finalLaser = laser;
 	    	
 	    	setTimeout((function(){
 		    	this.explodeThing(this.ego, this.protagonist);
 		    	this.protagonist.gameOver();
-		    	this.removeThing(this.badguyZepLaser);
+		    	this.removeThing(laser);
 	    	}).bind(this), 1500);
+	    }
+	    
+	    // this allows to move camera back and show the poor bad guy
+	    if (this.field.goodguy.location.x - this.ego.location.x < 50) {
+	    	this.cleanupEnabled = false;
+	    } else if (this.ego.location.x > 20) {
+	    	// enable cleanup if the cut-scene was already shown and we're not in the end-game
+	    	this.cleanupEnabled = true;
+	    }
+	    
+	    if ((this.field.goodguy.location.x - this.field.badguy.location.x < 18) && !this.finalLaser) {
+	    	console.log('game won condition');
+	    	// i'm evil copy-pase ]:-]
+	    	var laser = new flame.entity.Stretcher('red_laser');
+	        laser.locked = true;
+	    	laser.stretch.end.thing = this.field.badguy;
+	    	laser.stretch.end.anchor = {point: ccp(-0.7, 0)};
+	    	laser.stretch.start.thing = this.field.goodguy;
+	    	laser.stretch.start.anchor = {point: ccp(-0.3, 6.3)};
+	    	this.addThing(laser);
+	    	this.envision(laser);
+	    	
+	    	this.finalLaser = laser;
+	    	
+	    	this.protagonist.startGameWon();
+	    	
+	    	setTimeout((function(){
+		    	this.explodeThing(this.field.badguy, this.protagonist);
+		    	this.protagonist.gameWon();
+		    	this.removeThing(laser);
+	    	}).bind(this), 1500);
+	    }
+	    
+	    if (this.field.goodguy.location.x - this.ego.location.x < 2 && !this.finalLaser) {
+	    	console.log('teleportation');
+	    	this.field.badguy.location.x = this.field.goodguy.location.x - 17.5;
 	    }
 	},
 	
@@ -249,6 +287,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	},
 	
 	cleanupField: function() {
+		if (!this.cleanupEnabled) return;
 		for (var k in this.field.items) {
 			var thing = this.field.get(k);
 			if (thing.locked) continue;

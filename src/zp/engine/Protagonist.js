@@ -41,18 +41,17 @@ Protagonist.inherit(flame.engine.Protagonist, {
 			egoHud = new EgoHud({hudBuilder: hudBuilder, viewport: this.viewport, ego: zep});
 		this.egoHud = egoHud;
 		
-		var soundRepo = new jsein.JsonRepo(require('../../resources/data/sounds'));
-		this.soundPlayer = flame.viewport.SoundPlayer.make({defRepo: soundRepo});
+		this.setSoundRepo(new jsein.JsonRepo(require('../../resources/data/sounds')));
 		
 	    this.viewport.makeAnimator();
-	    this.viewport.scaleCameraTo(0.5, 1);
+	    this.viewport.scaleCameraTo(0.5, 0.5);
 	    
 	    /*
 	    var cameraTop = 10.5;
 	    p.syncCamera = function() {};
 	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
 	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
-*/	  
+	    */
 	    
 	    setTimeout((function(){
 		    this.syncCamera = function() {
@@ -94,14 +93,52 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	    this.interactor.afterInteract();
 	},
 	
+	// SOME CUT SCENES AND VIS EFFECTS
+	
 	gameOver: function() {
 		this.ego.dead = true;
+		this.fe.field.badguy.stop();
+		console.log('here');
 		var label = this.viewport.nf.makeLabel({
 			string: 'Game Over, baby ;)',
 			fontSize: 40,
 			fontName: 'Serif',
 			fontColor: '#770000'
 		});
+		label.anchorPoint = ccp(0.5, 0.5);
+		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);
+		this.viewport.hud.addChild(label);
+	},
+
+	startGameWon: function() {
+		this.fe.field.badguy.stop();
+		this.syncCamera = function(){};
+		var cameraPos = ccp((this.fe.field.badguy.location.x + this.fe.field.goodguy.location.x) / 2, 10.5);
+		this.viewport.moveCameraTo(this.location2position(cameraPos), 1.5);
+		this.ego.state.enabled = false;
+	},
+
+	gameWon: function() {
+		this.ego.dead = true; // you won, so you're dead ;)
+		var label = this.viewport.nf.makeLabel({
+			string: 'you win!',
+			fontSize: 40,
+			fontName: 'Serif',
+			fontColor: '#004400'
+		});
+		
+		setTimeout((function(){
+			var label = this.viewport.nf.makeLabel({
+				string: 'FATALITY',
+				fontSize: 35,
+				fontName: 'Serif',
+				fontColor: '#004400'
+			});
+			label.anchorPoint = ccp(0.5, 0.5);
+			label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2 - 60);
+			this.viewport.hud.addChild(label);
+		}).bind(this), 3000);
+		
 		label.anchorPoint = ccp(0.5, 0.5);
 		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);
 		this.viewport.hud.addChild(label);
