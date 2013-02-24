@@ -13,6 +13,12 @@ var
 function FieldFactory(defRepo) {
 	this.defRepo = defRepo;
 	this.grounds = ['ground1', 'ground2'];
+	
+	this.candids = [];
+	this.field = new flame.entity.Field;
+	
+	// meters / second for puffs
+	this.field.wind = ccp(-1, 0);
 }
 
 /**
@@ -21,7 +27,7 @@ function FieldFactory(defRepo) {
  * @param opts
  */
 FieldFactory.prototype.addGround = function(opts) {
-	var x = 0,
+	var x = -30,
 	    y = 0.5;
 	
 	for (var i = 0; i < 500; i++) {
@@ -56,17 +62,7 @@ FieldFactory.prototype.addBackgrounds = function(opts) {
 		element.location = ccp(x, 3);
 		element.nobody = true;
 		this.candids.push(element);
-	}
-	
-	x = 0;
-	
-	for (var i = 0; i < 50; i++) {
-		var element = new flame.entity.Thing('tree1front');
-		x += Math.random() * 7 + 3;
-		element.location = ccp(x, 3);
-		element.nobody = true;
-		this.candids.push(element);
-	}
+	}	
 };
 
 FieldFactory.prototype.addZeps = function(opts) {
@@ -166,26 +162,7 @@ FieldFactory.prototype.addHouses = function(opts) {
 };
 
 
-
-FieldFactory.prototype.make = function(opts) {
-	this.candids = [];
-	this.field = new flame.entity.Field;
-	
-	// meters / second for puffs
-	this.field.wind = ccp(-1, 0);
-	
-	this.addGround(opts);
-	this.addHouses(opts);
-	this.addBackgrounds(opts);
-	this.addZeps(opts);
-	//this.addPuffs(opts);
-	this.addClouds(opts);
-	this.addStacks(opts);
-	
-	this.field.badguy = new BadGuy();
-	this.field.badguy.location = ccp(-10, 5);
-	this.candids.push(this.field.badguy);
-	
+FieldFactory.prototype.candidsToField = function(opts) {
 	// sort prepared elements by X, so that they can be envisioned and embodied 
 	// only at the moment when player reaches a certain point
 	this.candids.sort(function(a,b){return a.location.x - b.location.x;});
@@ -194,7 +171,26 @@ FieldFactory.prototype.make = function(opts) {
 		this.field.add(this.candids[i]);
 	}
 	
-	return this.field;
+	return this.field;	
+};
+
+FieldFactory.prototype.make = function(opts) {	
+	this.addGround(opts);
+	this.addHouses(opts);
+	this.addBackgrounds(opts);
+	this.addZeps(opts);
+	this.addClouds(opts);
+	this.addStacks(opts);
+	
+	this.field.badguy = new BadGuy();
+	this.field.badguy.location = ccp(-10, 5);
+	this.candids.push(this.field.badguy);
+	
+	this.field.goodguy = new flame.entity.Thing('goodguy');
+	this.field.goodguy.location = ccp(10, 7.5);
+	this.candids.push(this.field.goodguy);
+		
+	return this.candidsToField(opts);
 };
 
 module.exports = FieldFactory;

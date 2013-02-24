@@ -23,7 +23,7 @@ jsein.registerCtorLocator(require('./zp/util/ctorLocator'));
 
 var defRepo = new jsein.JsonRepo();
 defRepo.loadFile('/resources/data/flyers/zeps');
-defRepo.loadFile('/resources/data/badguy');
+defRepo.loadFile('/resources/data/guys');
 defRepo.loadFile('/resources/data/puffs');
 defRepo.loadFile('/resources/data/ground');
 defRepo.loadFile('/resources/data/obstacles');
@@ -39,7 +39,7 @@ defRepo.loadFile('/resources/data/stacks');
 function Zp () {
     Zp.superclass.constructor.call(this);
     
-    var fieldFactory = new(require('./zp/demiurge/FieldFactory'))(defRepo);
+    var fieldFactory = new(require('./zp/demiurge/TutorialFactory'))(defRepo);
 
 	this.protagonist = flame.engine.Protagonist.make({ProtagonistClass: require('./zp/engine/Protagonist')});
     
@@ -81,11 +81,32 @@ Zp.inherit(Layer, {
 		
 	    v.addLayersTo(this);
 	    v.makeAnimator();
-	    v.scaleCameraTo(0.5, 0.5);
+	    v.scaleCameraTo(0.5, 5);
 	    
+	    var cameraTop = 10.5;
+	    
+/*
+	    p.syncCamera = function() {};
+	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
+	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
+*/	    
+
+	    setTimeout((function(){
+		    p.syncCamera = function() {
+				var body = this.fe.get(this.ego.bodyId);
+				if (body) {
+					var point = this.location2position(body.GetPosition());
+					point = geo.ccp(Math.floor(-point.x * this.viewport.scale + this.viewport.size.width / 6), 10);
+					this.viewport.scrolled.position = point;
+				}
+		    };
+	    }).bind(this), 0);
+	    
+	    /*
 	    v.moveCameraTo = function(point) {
 			this.scrolled.position = geo.ccp(Math.floor(-point.x*this.scale + this.size.width / 6), 10);
 		};
+		*/
 	},
 	
 	setupInteractor: function() {

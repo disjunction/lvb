@@ -1,0 +1,22 @@
+{
+	"goodguy": {
+		"nobody": true,
+		"nodes": {
+			"stuff": {
+				"opts": {
+					"file": "/resources/sprites/goodguy.png",
+				}
+			}
+		}
+	},
+	"badguy": {
+		"nobody": true,
+		"nodes": {
+			"obstacle": {
+				"opts": {
+					"file": "/resources/sprites/badguy.png",
+				}
+			}
+		}
+	}
+}
