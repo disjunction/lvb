@@ -36,11 +36,8 @@ exports.testMakeWithoutProtagonist = function(test) {
 };
 
 exports.testMakeWithProtagonist = function(test) {
-	var protagonist = flame.mock.makeProtagonist(),
-		opts = {
-			'protagonist': protagonist,
-		},
-	    fe = new flame.engine.FieldEngine.make(opts),
+	var fe = new flame.engine.FieldEngine.make(),
+		protagonist = flame.mock.makeProtagonistWithFieldEngine(fe),
 	    node = fe.nodeBuilder.viewport.nf.makeSprite({file: 'some.jpg'});
 	
 	fe.step();
@@ -98,14 +95,13 @@ exports.testRayShot = function(test) {
 };
 
 exports.testSpawnThing = function(test) {
-	var protagonist = flame.mock.makeProtagonist(),
-		defs = new jsein.JsonRepo(require(tests.testsPath + '/data/test_defs')),
-		opts = {
-			protagonist: protagonist,
-			defRepo: defs
-		},
-	    fe = new flame.engine.FieldEngine.make(opts);
-		thing = fe.spawnThing({type: 'ZepSelf', location: {x: 5, y: 3}});
+	var	defs = new jsein.JsonRepo(require(tests.testsPath + '/data/test_defs')),
+	    fe = flame.engine.FieldEngine.make({defRepo: defs}),
+		p = flame.mock.makeProtagonist();
+	
+	fe.injectViewport(p.viewport);
+
+	var thing = fe.spawnThing({type: 'ZepSelf', location: {x: 5, y: 3}});
 	
 	test.equal(5, thing.location.x);
 	test.ok(thing.nodes.main); // envisioned

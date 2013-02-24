@@ -40,12 +40,9 @@ function Zp () {
     Zp.superclass.constructor.call(this);
     
     var fieldFactory = new(require('./zp/demiurge/TutorialFactory'))(defRepo);
-
-	this.protagonist = flame.engine.Protagonist.make({ProtagonistClass: require('./zp/engine/Protagonist')});
     
 	var feOpts = {
 			'field': fieldFactory.make(),
-			'protagonist': this.protagonist,
 			'worldOpts': {gravity: ccp(0, -10)},
 			'BodyBuilderClass': require('./zp/engine/ThingBodyBuilder'),
 			'NodeBuilderClass': require('./zp/engine/ThingNodeBuilder'),
@@ -54,9 +51,11 @@ function Zp () {
 		};
     this.fe = flame.engine.FieldEngine.make(feOpts);
     
-	var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});	
-    
-    this.setupProtagonist(this.protagonist, zep);
+    this.protagonist = flame.engine.Protagonist.make({ProtagonistClass: require('./zp/engine/Protagonist'),
+    												  fieldEngine: this.fe
+    												  });
+        
+    this.setupProtagonist(this.protagonist);
     this.setupInteractor();
     
     this.scheduleUpdate();
@@ -66,7 +65,8 @@ function Zp () {
 // Inherit from cocos.nodes.Layer
 Zp.inherit(Layer, {
 	setupProtagonist: function(p, zep) {
-		p.ego = p.fe.ego = zep;
+		var zep = this.fe.spawnThing({type: 'ZepSelf', location: {x: 2, y: 2}});	
+		p.setEgo(zep);
 		p.fe.protagonist = p; // backlink from fe to protagonist is bad :(
 
 		var v = p.viewport;
@@ -82,10 +82,9 @@ Zp.inherit(Layer, {
 	    v.addLayersTo(this);
 	    v.makeAnimator();
 	    v.scaleCameraTo(0.5, 5);
-	    
-	    var cameraTop = 10.5;
-	    
+
 /*
+	    var cameraTop = 10.5;
 	    p.syncCamera = function() {};
 	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
 	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
