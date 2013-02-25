@@ -33,14 +33,14 @@ function EgoHud(opts) {
 	this.velocity = addLabel('distance', '0', 10);
 	
 	addLabel('l3', 'Score:', 30);
-	this.crates = addLabel('crates', '0', 10);
+	this.score = addLabel('score', '0', 10);
 }
 
 EgoHud.inherit(flame.viewport.hud.EgoHud, {
 	propertyListener: function(event) {
 		switch (event.property) {
-		case 'crates':	
-			this.crates.string = '' + event.newValue;
+		case 'score':	
+			this.score.string = '' + event.newValue;
 			break;
 		case 'velocity':	
 			this.velocity.string = '' + event.newValue;

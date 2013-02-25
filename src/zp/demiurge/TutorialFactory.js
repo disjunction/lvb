@@ -27,7 +27,7 @@ TutorialFactory.inherit(FieldFactory, {
 		this.addBackgrounds(opts);
 		this.addGround(opts);
 		//this.addHouses(opts);
-		//this.addZeps(opts);
+		this.addZeps(opts);
 		this.addClouds(opts);
 		//this.addStacks(opts);
 		
@@ -36,7 +36,7 @@ TutorialFactory.inherit(FieldFactory, {
 		this.candids.push(this.field.badguy);
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
-		this.field.goodguy.location = ccp(80, 7.5);
+		this.field.goodguy.location = ccp(180, 7.5);
 		this.candids.push(this.field.goodguy);
 		
 		return this.candidsToField(opts);

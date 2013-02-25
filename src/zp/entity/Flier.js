@@ -16,9 +16,9 @@ function Flier(opts) {
 }
 
 Flier.inherit(flame.entity.Movable, {
-	_crates: 0,
-	set crates(v) {	this.setter('crates', v);},
-	get crates() { return this._crates; },
+	_score: 0,
+	set score(v) {	this.setter('score', v);},
+	get score() { return this._score; },
 	
 	_velocity: 0,
 	set velocity(v) { this.setter('velocity', v, 0.3);},
