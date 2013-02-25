@@ -131,12 +131,12 @@ Protagonist.inherit(flame.engine.Protagonist, {
 				string: 'FATALITY',
 				fontSize: 35,
 				fontName: 'Serif',
-				fontColor: '#004400'
+				fontColor: '#990000'
 			});
 			label.anchorPoint = ccp(0.5, 0.5);
 			label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2 - 60);
 			this.viewport.hud.addChild(label);
-		}).bind(this), 3000);
+		}).bind(this), 5000);
 		
 		label.anchorPoint = ccp(0.5, 0.5);
 		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);

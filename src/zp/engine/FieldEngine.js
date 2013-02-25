@@ -188,7 +188,8 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
 	    
 	    if (this.ego.distance <= 2 && !this.ego.dead && !this.finalLaser) {
-	        var laser = new flame.entity.Stretcher('red_laser');
+	    	this.nodeBuilder.viewport.play('laser_shot');
+	    	var laser = new flame.entity.Stretcher('red_laser');
 	        laser.locked = true;
 	    	laser.stretch.start.thing = this.field.badguy;
 	    	laser.stretch.start.anchor = {point: ccp(-0.7, 2.9)};
@@ -215,6 +216,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    
 	    if ((this.field.goodguy.location.x - this.field.badguy.location.x < 18) && !this.finalLaser) {
 	    	// i'm evil copy-pase ]:-]
+	    	this.nodeBuilder.viewport.play('laser_shot');
 	    	var laser = new flame.entity.Stretcher('red_laser');
 	        laser.locked = true;
 	    	laser.stretch.end.thing = this.field.badguy;
