@@ -4,6 +4,7 @@ var
     geo      = require('pointExtension'),
     ccp      = geo.ccp,
 	flame    = require('flame'),
+	jsein    = require('jsein'),
 	Flier    = require('../entity/Flier'),
 	Puff     = require('../entity/Puff'),
 	Cloud    = require('../entity/Cloud'),
@@ -19,6 +20,8 @@ function FieldFactory(defRepo) {
 	
 	// meters / second for puffs
 	this.field.wind = ccp(-1, 0);
+	
+	this.uniDef = 0;
 }
 
 /**
@@ -46,6 +49,45 @@ FieldFactory.prototype.addGround = function(opts) {
 	}
 };
 
+FieldFactory.prototype.makeTable = function(string) {
+	var def = jsein.clone(this.defRepo.get('table'));
+	def.nodes.text = {
+		type: 'label',
+		layer: 'bg',
+		opts: {
+			string: string,
+			fontSize: 40,
+			fontName: 'Serif',
+			fontColor: '#000000',
+			anchorPoint: ccp(0.5, -1.8)
+		}
+	};
+	var key = 'def' + this.uniDef++;
+	this.defRepo.defs[key] = def;
+	return new flame.entity.Thing(key);
+};
+
+// just a string hanging in the sky :)
+FieldFactory.prototype.makeHanger = function(string) {
+	var def = {
+		nobody: true,
+		nodes: {
+			bg: {
+				type: 'label',
+				layer: 'bg',
+				opts: {
+					string: string,
+					fontSize: 50,
+					fontName: 'Serif',
+					fontColor: '#222266'
+				}
+			}
+		}
+	};
+	var key = 'def' + this.uniDef++;
+	this.defRepo.defs[key] = def;
+	return new flame.entity.Thing(key);
+};
 
 FieldFactory.prototype.addBackgrounds = function(opts) {
 	var element = new flame.entity.Thing('softsky');

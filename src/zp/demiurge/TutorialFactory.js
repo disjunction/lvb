@@ -16,7 +16,6 @@ var
  * generates a tutorial level
  * 
  * @param defRepo
- * @returns
  */
 function TutorialFactory(defRepo) {
 	TutorialFactory.superclass.constructor.call(this, defRepo);
@@ -34,6 +33,14 @@ TutorialFactory.inherit(FieldFactory, {
 		this.field.badguy = new BadGuy();
 		this.field.badguy.location = ccp(-10, 5);
 		this.candids.push(this.field.badguy);
+		
+		var t = this.makeTable('hello');
+		t.location = ccp(5,4.5);
+		this.candids.push(t);
+		
+		t = this.makeHanger('hello world!');
+		t.location = ccp(5,10);
+		this.candids.push(t);
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
 		this.field.goodguy.location = ccp(180, 7.5);

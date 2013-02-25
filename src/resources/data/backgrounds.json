@@ -1,4 +1,14 @@
 {
+	"table": {
+		"nobody": true,
+		"nodes": {
+			"bg": {
+				"opts": {
+					"file": "/resources/sprites/backgrounds/table.png"
+				}
+			}
+		}
+	},
 	"tree1": {
 		"nodes": {
 			"bg": {

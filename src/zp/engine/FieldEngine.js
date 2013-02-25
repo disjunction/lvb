@@ -237,7 +237,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	    	}).bind(this), 1500);
 	    }
 	    
-	    if (this.field.goodguy.location.x - this.ego.location.x < 2 && !this.finalLaser) {
+	    if (!this.finalLaser && this.field.goodguy.location.x - this.ego.location.x < 2) {
 	    	this.field.badguy.location.x = this.field.goodguy.location.x - 17.5;
 	    }
 	},

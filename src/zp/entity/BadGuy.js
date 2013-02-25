@@ -20,7 +20,7 @@ BadGuy.inherit(flame.entity.Movable, {
 		this.location.x += this.speed * delta;
 	},
 	stop: function() {
-		this.acceleration = -2;
+		this.acceleration = -1;
 		this.maxSpeed = 100;
 	}
 });
