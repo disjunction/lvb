@@ -49,7 +49,7 @@ FieldFactory.prototype.addGround = function(opts) {
 	}
 };
 
-FieldFactory.prototype.makeTable = function(string) {
+FieldFactory.prototype.makeTable = function(string, location) {
 	var def = jsein.clone(this.defRepo.get('table'));
 	def.nodes.text = {
 		type: 'label',
@@ -64,11 +64,13 @@ FieldFactory.prototype.makeTable = function(string) {
 	};
 	var key = 'def' + this.uniDef++;
 	this.defRepo.defs[key] = def;
-	return new flame.entity.Thing(key);
+	var r = new flame.entity.Thing(key);
+	location && (r.location = location);
+	return r;
 };
 
 // just a string hanging in the sky :)
-FieldFactory.prototype.makeHanger = function(string) {
+FieldFactory.prototype.makeHanger = function(string, location) {
 	var def = {
 		nobody: true,
 		nodes: {
@@ -86,19 +88,19 @@ FieldFactory.prototype.makeHanger = function(string) {
 	};
 	var key = 'def' + this.uniDef++;
 	this.defRepo.defs[key] = def;
-	return new flame.entity.Thing(key);
+	var r = new flame.entity.Thing(key);
+	location && (r.location = location);
+	return r;
 };
 
-FieldFactory.prototype.addBackgrounds = function(opts) {
+FieldFactory.prototype.addBackgrounds = function(opts, x, qty) {
 	var element = new flame.entity.Thing('softsky');
 	element.location = ccp(10, 10);
 	element.nobody = true;
 	element.locked = true;
 	this.candids.push(element);
 	
-	var x = 0;
-	
-	for (var i = 0; i < 50; i++) {
+	for (var i = 0; i < qty; i++) {
 		var element = new flame.entity.Thing('tree1');
 		x += Math.random() * 7 + 3;
 		element.location = ccp(x, 3);
@@ -107,12 +109,10 @@ FieldFactory.prototype.addBackgrounds = function(opts) {
 	}	
 };
 
-FieldFactory.prototype.addZeps = function(opts) {
-	var def = this.defRepo.get('pirate'),
-		x = 20;
-
+FieldFactory.prototype.addZeps = function(opts, x, qty) {
+	var def = this.defRepo.get('pirate');
 	
-	for (var i = 0; i < 50; i++) {
+	for (var i = 0; i < qty; i++) {
 		var element = new Flier('pirate');
 			x += Math.random() * 7 + 3;
 		element.location = ccp(x, 12 + Math.random() * 7);
@@ -121,29 +121,8 @@ FieldFactory.prototype.addZeps = function(opts) {
 	}
 };
 
-FieldFactory.prototype.addPuffs = function(opts) {
-	var x = 10,
-		y = 7;
-	for (var i = 0; i < 5; i++) {
-		var element = new Puff('puff01');
-		
-		element.location = ccp(x,y + Math.random() * 4);
-		element.type = 'puff01';
-		element.hSpeed = this.field.wind.x;
-		element.vTop = 10;
-		element.vFactor = 0.1;
-		element.aSpeed = 0.5;
-		element.sSpeed = 0.1;
-		element.dissolveTime = 10;
-		this.candids.push(element);		
-		x += 5;
-	}
-};
-
-FieldFactory.prototype.addClouds = function(opts) {
-	var x = 10;
-	
-	for (var i = 0; i < 30; i++) {
+FieldFactory.prototype.addClouds = function(opts, x, qty) {
+	for (var i = 0; i < qty; i++) {
 		var y = 14 + Math.random() * 8,
 			cloud = new Cloud;
 		cloud.location = ccp(x, y);
@@ -152,10 +131,8 @@ FieldFactory.prototype.addClouds = function(opts) {
 	}
 };
 
-FieldFactory.prototype.addStacks = function(opts) {
-	var x = 10 + Math.random() * 10;
-	
-	for (var i = 0; i < 30; i++) {
+FieldFactory.prototype.addStacks = function(opts, x, qty) {
+	for (var i = 0; i < qty; i++) {
 		var y = 4.6,
 			element = new Stack;
 		element.location = ccp(x, y);
@@ -164,16 +141,15 @@ FieldFactory.prototype.addStacks = function(opts) {
 	}
 };
 
-FieldFactory.prototype.addHouses = function(opts) {
-	var x = 10,
-	    y = 0.9,
+FieldFactory.prototype.addHouses = function(opts, x, qty) {
+	var y = 0.9,
 	    def = this.defRepo.get('house1_base'),
 		def2 = this.defRepo.get('house1_windows'),
 		size = def.body.fixtures.main.box,
 		size2 = def2.body.fixtures.main.box;
 	
 	
-	for (var i = 0; i < 50; i++) {
+	for (var i = 0; i < qty; i++) {
 		var index = Math.floor(Math.random() * 3),
 			element = new flame.entity.Thing();
 		
@@ -218,11 +194,11 @@ FieldFactory.prototype.candidsToField = function(opts) {
 
 FieldFactory.prototype.make = function(opts) {	
 	this.addGround(opts);
-	this.addHouses(opts);
-	this.addBackgrounds(opts);
-	this.addZeps(opts);
-	this.addClouds(opts);
-	this.addStacks(opts);
+	this.addHouses(opts, 5, 50);
+	this.addBackgrounds(opts, 0, 50);
+	this.addZeps(opts, 10, 30);
+	this.addClouds(opts, 20, 40);
+	this.addStacks(opts, 50, 30);
 	
 	this.field.badguy = new BadGuy();
 	this.field.badguy.location = ccp(-10, 5);

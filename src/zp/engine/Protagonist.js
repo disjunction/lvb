@@ -85,6 +85,8 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
 	    layout.keys[Interactor.KEY_D] = {type: 'event', on: 'keyUp', event: 'crates'};
 	    
+	    layout.keys[Interactor.ARROW_RIGHT] = {type: 'state', state: 'nitro'};
+	    
 	    this.interactor = new Interactor({
 	    	layer: layer,
 	    	applier: applier,

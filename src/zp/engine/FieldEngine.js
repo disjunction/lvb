@@ -128,6 +128,10 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			body.ApplyForce(ccp(0, -15), body.GetPosition());
 		}
 		
+		if (body.thing.state.nitro) {
+			body.ApplyForce(ccp(30, 0), body.GetPosition());
+		}
+		
 		var time = Date.now(),
 			v = body.GetLinearVelocity();
 		
