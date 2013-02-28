@@ -8,8 +8,8 @@ function BadGuy(opts) {
 	this.nobody = true;
 	this.locked = true;
 	
-	this.acceleration = 0.5;
-	this.maxSpeed = 2.5;
+	this.acceleration = 0.1;
+	this.maxSpeed = 3.5;
 	this.speed = 0;
 }
 

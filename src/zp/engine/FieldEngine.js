@@ -30,7 +30,7 @@ function FieldEngine(field) {
     // ugly solution but it creates less possible conflicts
     this.lastCleanup = Date.now();
     this.cleanupPeriod = 1000;
-    this.cleanupEnabled = true;
+    this.cleanupEnabled = false;
     
     // reduces CPU load calculating collisions with the clouds
     this.lastCloudCheck = Date.now();

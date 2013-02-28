@@ -12,7 +12,7 @@ function Flier(opts) {
 	this.gun = new Gun();
 	this.size = geo.sizeMake(1,1);
 	this.direction = 1;
-	this.hp = 100;
+	this.hp = 50;
 }
 
 Flier.inherit(flame.entity.Movable, {

@@ -29,6 +29,8 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	},
 	
 	setFieldEngine: function(fe) {
+		var cameraTop = 10.5;
+		
 		Protagonist.superclass.setFieldEngine.call(this, fe);
 		fe.preStepPlugins.push(this.processObjectEventQueue.bind(this));
 		
@@ -44,8 +46,24 @@ Protagonist.inherit(flame.engine.Protagonist, {
 		this.setSoundRepo(new jsein.JsonRepo(require('../../resources/data/sounds')));
 		
 	    this.viewport.makeAnimator();
+	    this.syncCamera = function(){};
 	    this.viewport.scaleCameraTo(0.5, 0.5);
+	    this.viewport.moveCameraTo(this.location2position(ccp(this.fe.field.badguy.location.x, cameraTop)));
 	    
+	    /*
+	    setTimeout((function(){
+	    	this.viewport.moveCameraTo(this.location2position(ccp(this.ego.location.x, cameraTop)), 1);
+	    }).bind(this), 1000);
+	    */
+	    setTimeout((function(){
+	    	var point = ccp(this.ego.location.x + this.viewport.size.width / this.config.ppm * 2 / 3, cameraTop);
+	    	this.viewport.moveCameraTo(this.location2position(point), 1);
+	    }).bind(this), 3000);
+	    
+	    setTimeout((function(){
+	    	var point = ccp(this.ego.location.x + this.viewport.size.width / this.config.ppm * 2 / 3, cameraTop);
+	    	this.viewport.moveCameraTo(this.location2position(point), 0.5);
+	    }).bind(this), 4000);
 	    /*
 	    var cameraTop = 10.5;
 	    p.syncCamera = function() {};
@@ -58,17 +76,15 @@ Protagonist.inherit(flame.engine.Protagonist, {
 				var body = this.fe.get(this.ego.bodyId);
 				if (body) {
 					var point = this.location2position(body.GetPosition());
-					point = geo.ccp(Math.floor(-point.x * this.viewport.scale + this.viewport.size.width / 6), 10);
+					point = geo.ccp(Math.floor(-point.x * this.viewport.scale + this.viewport.size.width / 6), cameraTop);
 					this.viewport.scrolled.position = point;
 				}
 		    };
-	    }).bind(this), 0);
+	    }).bind(this), 4500);
 	    		
 	},
 	
-	setLayer: function(layer) {
-		Protagonist.superclass.setLayer.call(this, layer);
-		
+	setupInteractor: function() {
 		var Applier = require('../viewport/InteractionApplier'),
 	    applier = new Applier({
 	    	protagonist: this
@@ -85,14 +101,20 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	    layout.keys[Interactor.KEY_S] = {type: 'event', on: 'keyUp', event: 'snow'};
 	    layout.keys[Interactor.KEY_D] = {type: 'event', on: 'keyUp', event: 'crates'};
 	    
-	    layout.keys[Interactor.ARROW_RIGHT] = {type: 'state', state: 'nitro'};
+	    layout.keys[Interactor.KEY_N] = {type: 'state', state: 'nitro'};
 	    
 	    this.interactor = new Interactor({
-	    	layer: layer,
+	    	layer: this.viewport.layer,
 	    	applier: applier,
 	    	layout: layout
 	    });
+	    
 	    this.interactor.afterInteract();
+	},
+	
+	setLayer: function(layer) {
+		Protagonist.superclass.setLayer.call(this, layer);
+		this.setupInteractor();		
 	},
 	
 	// SOME CUT SCENES AND VIS EFFECTS

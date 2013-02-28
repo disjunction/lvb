@@ -29,6 +29,8 @@ TutorialFactory.inherit(FieldFactory, {
 		this.field.badguy.location = ccp(-10, 5);
 		this.candids.push(this.field.badguy);
 		
+		this.addClouds(opts, -20, 2);
+		
 		this.candids.push(this.makeHanger("Jesus christ! It's Bender!", ccp(0, 17)));
 		this.candids.push(this.makeHanger('Press and hold "UP" to fly', ccp(3, 15)));
 		
@@ -57,7 +59,6 @@ TutorialFactory.inherit(FieldFactory, {
 		this.addZeps(opts, x+=25, 7);
 		
 		this.candids.push(this.makeHanger('Collect crates for score', ccp(x+=5, 7)));
-		
 		
 		this.candids.push(this.makeHanger('Gun recoil slows you down', ccp(x+=15, 20)));
 		
