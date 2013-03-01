@@ -13,10 +13,11 @@ var smog = require('smog'),
 	flame = require('flame'),
 	Interactor = flame.viewport.Interactor;
 
+smog.app.mergeConfig(require('/configs/development'));
+
 // select environment depending on host
-switch ((new flame.viewport.Webpage()).host) {
-	case 'zp.pluseq.com': smog.app.mergeConfig(require('/configs/production'));break;
-	default: smog.app.mergeConfig(require('/configs/development'));
+if ((new flame.viewport.Webpage()).host == 'zp.pluseq.com') {
+	smog.app.mergeConfig(require('/configs/production'));
 }
 
 jsein.registerCtorLocator(require('/zp/util/ctorLocator'));
