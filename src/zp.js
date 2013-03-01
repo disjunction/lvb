@@ -9,13 +9,15 @@ var cocos  = require('cocos2d'),
     jsein    = require('jsein');
 
 // ZP bootstraping
-  
-var smog = require('smog');
-smog.app.config = require('/configs/production');
-smog.app.config = require('/configs/development');
-
-var flame = require('flame'),
+var smog = require('smog'),
+	flame = require('flame'),
 	Interactor = flame.viewport.Interactor;
+
+// select environment depending on host
+switch ((new flame.viewport.Webpage()).host) {
+	case 'zp.pluseq.com': smog.app.mergeConfig(require('/configs/production'));break;
+	default: smog.app.mergeConfig(require('/configs/development'));
+}
 
 jsein.registerCtorLocator(require('/zp/util/ctorLocator'));
 

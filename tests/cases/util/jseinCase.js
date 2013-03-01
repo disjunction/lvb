@@ -79,7 +79,7 @@ exports.testCtorLocators = function(test) {
 	var o = jsein.recover(data);
 	
 	test.equals('world', o.some);
-	test.equals(100, o.hp);
+	test.equals(50, o.hp);
 	
 	jsein.ctorLocators = tmp;
 	
