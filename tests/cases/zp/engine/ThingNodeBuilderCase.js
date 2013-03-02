@@ -15,6 +15,6 @@ exports.testNodesForZep = function(test) {
     t.type = 'ZepSelf';
     
     nodeBuilder.envision(t);
-    test.equal(0.3, t.nodes.main.mockOpts.scale);
+    test.equal(0.3, t.nodes.stuff.mockOpts.scale);
 	test.done();
 };

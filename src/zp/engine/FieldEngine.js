@@ -122,7 +122,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	 * @param body
 	 */
 	preStepPlayerZep: function(body) {
-		if (body.thing.state.up) {
+		if (body.thing.state.up && body.thing.go) {
 			body.ApplyForce(ccp(0, 25), body.GetPosition());
 		} else {
 			body.ApplyForce(ccp(0, -15), body.GetPosition());

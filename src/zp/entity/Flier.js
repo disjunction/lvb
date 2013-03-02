@@ -13,6 +13,10 @@ function Flier(opts) {
 	this.size = geo.sizeMake(1,1);
 	this.direction = 1;
 	this.hp = 50;
+	
+	// can this flier fly?
+	// forces players to see the cutscene and only then fly
+	this.go = false;
 }
 
 Flier.inherit(flame.entity.Movable, {

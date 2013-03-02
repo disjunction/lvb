@@ -22,7 +22,9 @@ function TutorialFactory(defRepo) {
 }
 
 TutorialFactory.inherit(FieldFactory, {
-	make: function(opts) {	
+	make: function(opts) {
+		this.field.level = 'tutorial';
+		
 		this.addGround(opts);
 
 		this.field.badguy = new BadGuy();

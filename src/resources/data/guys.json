@@ -2,7 +2,7 @@
 	"goodguy": {
 		"nobody": true,
 		"nodes": {
-			"stuff": {
+			"main": {
 				"opts": {
 					"file": "/resources/sprites/goodguy.png",
 				}
@@ -12,7 +12,7 @@
 	"badguy": {
 		"nobody": true,
 		"nodes": {
-			"stuff": {
+			"main": {
 				"opts": {
 					"file": "/resources/sprites/badguy.png",
 				}

@@ -50,29 +50,20 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	    this.viewport.scaleCameraTo(0.5, 0.5);
 	    this.viewport.moveCameraTo(this.location2position(ccp(this.fe.field.badguy.location.x, cameraTop)));
 	    
-	    /*
-	    setTimeout((function(){
-	    	this.viewport.moveCameraTo(this.location2position(ccp(this.ego.location.x, cameraTop)), 1);
-	    }).bind(this), 1000);
-	    */
-	    setTimeout((function(){
-	    	var point = ccp(this.ego.location.x + this.viewport.size.width / this.config.ppm * 2 / 3, cameraTop);
-	    	this.viewport.moveCameraTo(this.location2position(point), 1);
-	    }).bind(this), 3000);
+
+	    var cameraDelay = this.fe.field.level == 'tutorial'? 2000 : 0;
 	    
-	    setTimeout((function(){
+	    var catchUp = function() {
 	    	var point = ccp(this.ego.location.x + this.viewport.size.width / this.config.ppm * 2 / 3, cameraTop);
 	    	this.viewport.moveCameraTo(this.location2position(point), 0.5);
-	    }).bind(this), 4000);
-	    /*
-	    var cameraTop = 10.5;
-	    p.syncCamera = function() {};
-	    p.viewport.moveCameraTo(p.location2position(ccp(p.fe.field.badguy.location.x * 0.5, cameraTop)));
-	    p.viewport.moveCameraTo(p.location2position(ccp(p.ego.location.x * 8, cameraTop)), 5);
-	    */
+	    };
+	    
+	    setTimeout(catchUp.bind(this), cameraDelay + 1000);
+	    setTimeout(catchUp.bind(this), cameraDelay + 1500);
 	    
 	    setTimeout((function(){
 		    this.syncCamera = function() {
+		    	this.ego.go = true;
 				var body = this.fe.get(this.ego.bodyId);
 				if (body) {
 					var point = this.location2position(body.GetPosition());
@@ -80,7 +71,7 @@ Protagonist.inherit(flame.engine.Protagonist, {
 					this.viewport.scrolled.position = point;
 				}
 		    };
-	    }).bind(this), 4500);
+	    }).bind(this), cameraDelay + 2000);
 	    		
 	},
 	
@@ -160,7 +151,7 @@ Protagonist.inherit(flame.engine.Protagonist, {
 			label.anchorPoint = ccp(0.5, 0.5);
 			label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2 - 60);
 			this.viewport.hud.addChild(label);
-		}).bind(this), 5000);
+		}).bind(this), 4000);
 		
 		label.anchorPoint = ccp(0.5, 0.5);
 		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);

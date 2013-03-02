@@ -8,15 +8,16 @@ var cocos  = require('cocos2d'),
     ccp    = geo.ccp,
     jsein    = require('jsein');
 
-// ZP bootstraping
+// ZP bootstrapping
 var smog = require('smog'),
 	flame = require('flame'),
-	Interactor = flame.viewport.Interactor;
+	Interactor = flame.viewport.Interactor,
+	webpage = new flame.viewport.Webpage();
 
 smog.app.mergeConfig(require('/configs/development'));
 
 // select environment depending on host
-if ((new flame.viewport.Webpage()).host == 'zp.pluseq.com') {
+if (webpage.host == 'zp.pluseq.com') {
 	smog.app.mergeConfig(require('/configs/production'));
 }
 
@@ -40,7 +41,12 @@ function Zp () {
     defRepo.loadFile('/resources/data/backgrounds');
     defRepo.loadFile('/resources/data/stacks');
     
-    var fieldFactory = new(require('./zp/demiurge/TutorialFactory'))(defRepo);
+    var className;
+    switch (webpage.params.level) {
+	    case 'tutorial': className = 'TutorialFactory';break;
+	    default: className = 'EasyFactory';
+    }
+    var fieldFactory = new(require('./zp/demiurge/' + className))(defRepo);
     
 	var feOpts = {
 		field: fieldFactory.make(),
@@ -55,7 +61,8 @@ function Zp () {
     var pOpts = {
 		ProtagonistClass: require('/zp/engine/Protagonist'),
 		fieldEngine: this.fe,
-		layer: this
+		layer: this,
+		webpage: webpage
 	};
     this.protagonist = flame.engine.Protagonist.make(pOpts);
     

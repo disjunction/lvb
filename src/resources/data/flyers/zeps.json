@@ -2,7 +2,7 @@
 	"ZepSelf": {
 		"className": "Flier",
 	    "nodes": {
-		    "main": {
+		    "stuff": {
 		    	"type": "animatedSprite",
 				"opts": {
 					"file": "/resources/sprites/flyers/zep1_ani.png",
@@ -17,7 +17,8 @@
 					"delay": 0.1
 				}
 			},
-			"stuff": {
+			"gun": {
+				"layer": "stuff",
 				"opts": {
 					"file": "/resources/sprites/flyers/parts/gutling.png",
 					"scale": 0.5,
