@@ -4,7 +4,7 @@
 			"obstacle": {
 				"type": "sprite",
 				"opts": {
-					"file": "/resources/sprites/obstacles/house2_base.png"
+					"file": "/resources/sprites/obstacles/house1_base.png"
 				}
 			}
 		},
@@ -27,7 +27,7 @@
 			"obstacle": {
 				"type": "sprite",
 				"opts": {
-					"file": "/resources/sprites/obstacles/house2_windows.png"
+					"file": "/resources/sprites/obstacles/house1_windows.png"
 				}
 			}
 		},
@@ -50,7 +50,7 @@
 			"obstacle": {
 				"type": "sprite",
 				"opts": {
-					"file": "/resources/sprites/obstacles/house2_roof.png",
+					"file": "/resources/sprites/obstacles/house1_roof.png",
 					"anchorPoint": {"x": 0.5, "y": -0.05}
 				}
 			}
@@ -67,6 +67,50 @@
 						     {"x": 2, "y": 0},
 						     {"x": 0, "y": 2.16}
 						 ]
+					}
+				}
+			}
+		}
+	},
+	"brickhouse": {
+		"nodes": {
+			"obstacle": {
+				"opts": {
+					"file": "/resources/sprites/obstacles/brickhouse.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "pitch",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 6,
+						"height": 4.61
+					}
+				}
+			}
+		}
+	},
+	"quadhouse": {
+		"nodes": {
+			"obstacle": {
+				"opts": {
+					"file": "/resources/sprites/obstacles/quadhouse.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "pitch",
+					"shape": "PolygonShape",
+					"box": {
+						"width": 8,
+						"height": 9.02
 					}
 				}
 			}

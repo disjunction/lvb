@@ -12,6 +12,9 @@ function Protagonist(viewport) {
 }
 
 Protagonist.inherit(flame.engine.Protagonist, {
+	/**
+	 * decouples vis effects from FieldEngine
+	 */
 	processObjectEventQueue: function() {
 		for (var i in this.fe.objectEventQueue) {
 			var item = this.fe.objectEventQueue[i];
@@ -28,6 +31,11 @@ Protagonist.inherit(flame.engine.Protagonist, {
 		this.fe.objectEventQueue = [];
 	},
 	
+	/**
+	 * initialize visual related stuff
+	 * which has dependency on the game field
+	 * @param FieldEngine fe
+	 */
 	setFieldEngine: function(fe) {
 		var cameraTop = 10.5;
 		
@@ -105,7 +113,7 @@ Protagonist.inherit(flame.engine.Protagonist, {
 	
 	setLayer: function(layer) {
 		Protagonist.superclass.setLayer.call(this, layer);
-		this.setupInteractor();		
+		this.setupInteractor();
 	},
 	
 	// SOME CUT SCENES AND VIS EFFECTS

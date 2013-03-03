@@ -28,6 +28,8 @@ TutorialFactory.inherit(FieldFactory, {
 		this.addGround(opts);
 
 		this.field.badguy = new BadGuy();
+		this.field.badguy.accelRate = 0.005; // give some handicap
+		
 		this.field.badguy.location = ccp(-10, 5);
 		this.candids.push(this.field.badguy);
 		
@@ -67,24 +69,22 @@ TutorialFactory.inherit(FieldFactory, {
 		this.candids.push(this.makeTable('Small Town', ccp(x+=20, 4.5)));
 		this.addHouses(opts, x+=7, 15);
 		
-		this.addZeps(opts, x+=10, 30);
+		this.addZeps(opts, x+=10, 15);
 		this.addClouds(opts, x+=35, 10);
 		
 		this.candids.push(this.makeHanger('Reach Lenin...', ccp(x+=100, 7)));
-		this.candids.push(this.makeHanger('... only he can kill Bender!', ccp(x+=15, 9)));
+		this.candids.push(this.makeHanger('... only he can stop Bender!', ccp(x+=15, 9)));
 		
 		this.candids.push(this.makeHanger('Avoid smoke!', ccp(x+=20, 11)));
-		this.addStacks(opts, x+=5, 7);
-		this.addClouds(opts, x+=30, 15);
-		this.addZeps(opts, x+=70, 10);
+		var fin = this.addStacks(opts, x+=5, 4);
+		this.addClouds(opts, x+=30, 10);
+		this.addZeps(opts, x+=60, 7);
 		
-		
-		this.addZeps(opts, x+=50, 10);
 		
 		this.candids.push(this.makeHanger('Maps are generated dynamically.', ccp(x+=20, 11)));
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
-		this.field.goodguy.location = ccp(x+=70, 7.5);
+		this.field.goodguy.location = ccp(fin + 10, 7.5);
 		this.candids.push(this.field.goodguy);
 		
 		return this.candidsToField(opts);

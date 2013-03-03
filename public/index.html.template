@@ -27,10 +27,9 @@
         </style>
     </head>
     <body>
-        <a href="#" onclick="document.getElementById('cocos2dView').innerHTML = '';zp.unscheduleUpdate()">chill out</a> | 
-        <a href="some">go away</a>
+        <a href="javascript:zp.home()">back to main menu</a>
         <div class="cocos2d-app" id="cocos2dView">
-            Loading Zp...
+            Loading loader of loader for loading Zeppelin Pursuit...
             ${scripts}
         </div>
     </body>

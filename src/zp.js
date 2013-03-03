@@ -11,12 +11,11 @@ var cocos  = require('cocos2d'),
 // ZP bootstrapping
 var smog = require('smog'),
 	flame = require('flame'),
-	Interactor = flame.viewport.Interactor,
 	webpage = new flame.viewport.Webpage();
 
 smog.app.mergeConfig(require('/configs/development'));
 
-// select environment depending on host
+// extend config depending on host
 if (webpage.host == 'zp.pluseq.com') {
 	smog.app.mergeConfig(require('/configs/production'));
 }
@@ -75,6 +74,11 @@ Zp.inherit(Layer, {
 	update: function(dt) {
 		this.fe.step();
 		this.protagonist.syncCamera();
+	},
+	
+	// callback for "back to main menu"
+	home: function() {
+		webpage.window.location = smog.app.config.extras.baseUrl;
 	}
 });
 

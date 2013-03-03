@@ -106,7 +106,8 @@ FieldFactory.prototype.addBackgrounds = function(opts, x, qty) {
 		element.location = ccp(x, 3);
 		element.nobody = true;
 		this.candids.push(element);
-	}	
+	}
+	return x;
 };
 
 FieldFactory.prototype.addZeps = function(opts, x, qty) {
@@ -119,6 +120,7 @@ FieldFactory.prototype.addZeps = function(opts, x, qty) {
 		if (def.direction) element.direction = def.direction;
 		this.candids.push(element);
 	}
+	return x;
 };
 
 FieldFactory.prototype.addClouds = function(opts, x, qty) {
@@ -129,6 +131,7 @@ FieldFactory.prototype.addClouds = function(opts, x, qty) {
 		this.candids.push(cloud);	
 		x += Math.random() * 20 + 5;
 	}
+	return x;
 };
 
 FieldFactory.prototype.addStacks = function(opts, x, qty) {
@@ -139,6 +142,31 @@ FieldFactory.prototype.addStacks = function(opts, x, qty) {
 		this.candids.push(element);	
 		x += Math.random() * 20 + 15;
 	}
+	return x;
+};
+
+FieldFactory.prototype.addIndustrialSector = function(opts, x, qty) {
+	for (var i = 0; i < qty; i++) {
+		var y = 4.6,
+			element = new Stack;
+		element.location = ccp(x, y);
+		this.candids.push(element);	
+		x += Math.random() * 20 + 15;
+	}
+	return x;
+};
+
+
+FieldFactory.prototype.addByDefName = function(name, x) {
+	var def = this.defRepo.get(name), 
+		element = new flame.entity.Thing(),
+		box = def.body.fixtures.main.box,
+		postfix = Math.random() * 3;
+	
+	element.type = name;
+	element.location = ccp(x, 0.9 + box.height / 2);
+	this.candids.push(element);
+	return x + box.width + postfix;
 };
 
 FieldFactory.prototype.addHouses = function(opts, x, qty) {
@@ -150,10 +178,15 @@ FieldFactory.prototype.addHouses = function(opts, x, qty) {
 	
 	
 	for (var i = 0; i < qty; i++) {
+		x += size.width / 2;
+		
+		if (Math.random() > 0.7) {
+			x = this.addByDefName("brickhouse", x);
+			continue;
+		}
+		
 		var index = Math.floor(Math.random() * 3),
 			element = new flame.entity.Thing();
-		
-		x += size.width / 2;
 		
 		element.location = ccp(x,y + size.height/2);
 		element.type = 'house1_base';
@@ -177,6 +210,7 @@ FieldFactory.prototype.addHouses = function(opts, x, qty) {
 		x += Math.floor(Math.random() * 8);
 		
 	}
+	return x;
 };
 
 

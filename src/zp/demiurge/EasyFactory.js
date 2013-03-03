@@ -28,7 +28,10 @@ EasyFactory.inherit(FieldFactory, {
 		this.addGround(opts);
 
 		this.field.badguy = new BadGuy();
+		this.field.badguy.accelRate = 0.1; // mini-handicap
 		this.field.badguy.location = ccp(-10, 5);
+		
+		
 		this.candids.push(this.field.badguy);
 		
 		var x = 10;
@@ -38,21 +41,20 @@ EasyFactory.inherit(FieldFactory, {
 		
 		this.addClouds(opts, x+=30, 4);
 		
-		this.addZeps(opts, x+=25, 7);
+		x = this.addZeps(opts, x+=25, 7);
 		
-		this.addHouses(opts, x+=7, 15);
+		this.addHouses(opts, x+=30, 15);
 		
 		this.addZeps(opts, x+=10, 30);
-		this.addClouds(opts, x+=35, 10);
+		x = this.addClouds(opts, x+=5, 10);
 		
-		this.addStacks(opts, x+=5, 7);
-		this.addClouds(opts, x+=30, 15);
-		this.addZeps(opts, x+=70, 10);		
+		var fin = this.addStacks(opts, x+=5, 7);
+		this.addClouds(opts, x+=30, 15);	
 		
 		this.addZeps(opts, x+=50, 10);
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
-		this.field.goodguy.location = ccp(x+=70, 7.5);
+		this.field.goodguy.location = ccp(fin + 10, 7.5);
 		this.candids.push(this.field.goodguy);
 		
 		return this.candidsToField(opts);

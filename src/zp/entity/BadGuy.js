@@ -11,11 +11,16 @@ function BadGuy(opts) {
 	this.acceleration = 0.1;
 	this.maxSpeed = 3.5;
 	this.speed = 0;
+	
+	// how distance will affect maxSpeed of badguy
+	this.accelRate = 0.2;
 }
 
 BadGuy.inherit(flame.entity.Movable, {
-	move: function(delta) {
-		this.speed < this.maxSpeed && (this.speed += this.acceleration * delta);
+	move: function(delta, distance) {
+		var maxSpeed = Math.max(this.maxSpeed, distance * this.accelRate);
+		this.speed < maxSpeed && (this.speed += this.acceleration * delta);
+		if (this.speed > maxSpeed) this.speed = maxSpeed;
 		if (this.speed < 0) this.speed = 0;
 		this.location.x += this.speed * delta;
 	},

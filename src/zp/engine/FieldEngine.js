@@ -187,9 +187,10 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	 * @param float delta
 	 */
 	preStepBadGuy: function(delta) {
-	    this.field.badguy.move(delta);
+		this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
+		
+		this.field.badguy.move(delta, this.ego.distance);
 	    this.updateThingNodes(this.field.badguy);
-	    this.ego.distance = Math.floor((this.ego.location.x - this.field.badguy.location.x) * 10) / 10;
 	    
 	    if (this.ego.distance <= 2 && !this.ego.dead && !this.finalLaser) {
 	    	this.nodeBuilder.viewport.play('laser_shot');
