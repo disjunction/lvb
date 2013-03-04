@@ -66,7 +66,7 @@ TutorialFactory.inherit(FieldFactory, {
 		
 		this.candids.push(this.makeHanger('Gun recoil slows you down', ccp(x+=15, 20)));
 		
-		this.candids.push(this.makeTable('Small Town', ccp(x+=20, 4.5)));
+		this.candids.push(this.makeTable('Small Town', x+=20));
 		this.addHouses(opts, x+=7, 15);
 		
 		this.addZeps(opts, x+=10, 15);

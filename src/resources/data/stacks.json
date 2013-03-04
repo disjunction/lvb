@@ -1,4 +1,5 @@
 {
+	// smoking stack
 	"stack01": {
 		"nodes": {
 			"obstacle": {
@@ -19,5 +20,27 @@
 				}
 			}
 		}
-	}
+	},
+	// non-smoking stack
+	"stack02": {
+		"nodes": {
+			"obstacle": {
+				"opts": {
+					"file": "/resources/sprites/stacks/stack01.png"
+				}
+			}
+		},
+		"body": {
+			"type": "static",
+			"fixtures": {
+				"main": {
+					"material": "pitch",
+					"box": {
+						"width": 1.5,
+						"height": 7.64
+					}
+				}
+			}
+		}
+	},
 }

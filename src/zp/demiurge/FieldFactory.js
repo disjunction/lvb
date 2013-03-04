@@ -49,23 +49,23 @@ FieldFactory.prototype.addGround = function(opts) {
 	}
 };
 
-FieldFactory.prototype.makeTable = function(string, location) {
+FieldFactory.prototype.makeTable = function(string, x) {
 	var def = jsein.clone(this.defRepo.get('table'));
 	def.nodes.text = {
 		type: 'label',
 		layer: 'bg',
 		opts: {
 			string: string,
-			fontSize: 40,
+			fontSize: 30,
 			fontName: 'Serif',
 			fontColor: '#000000',
-			anchorPoint: ccp(0.5, -1.8)
+			anchorPoint: ccp(0.5, -2.8)
 		}
 	};
 	var key = 'def' + this.uniDef++;
 	this.defRepo.defs[key] = def;
 	var r = new flame.entity.Thing(key);
-	location && (r.location = location);
+	x && (r.location = ccp(x, 4.5));
 	return r;
 };
 
@@ -134,24 +134,40 @@ FieldFactory.prototype.addClouds = function(opts, x, qty) {
 	return x;
 };
 
+FieldFactory.prototype.addStack = function(x) {
+	var def = this.defRepo.get('stack01'),
+		box = def.body.fixtures.main.box,
+		element = new Stack;
+	element.location = ccp(x + box.width / 2, 0.9 + box.height / 2);
+	this.candids.push(element);
+	return x + box.width;
+};
+
 FieldFactory.prototype.addStacks = function(opts, x, qty) {
 	for (var i = 0; i < qty; i++) {
-		var y = 4.6,
-			element = new Stack;
-		element.location = ccp(x, y);
-		this.candids.push(element);	
+		this.addStack(x);
 		x += Math.random() * 20 + 15;
 	}
 	return x;
 };
 
 FieldFactory.prototype.addIndustrialSector = function(opts, x, qty) {
+	var elementDefs = ['stack02', 'brickhouse', 'quadhouse'];
+	
 	for (var i = 0; i < qty; i++) {
-		var y = 4.6,
-			element = new Stack;
-		element.location = ccp(x, y);
-		this.candids.push(element);	
-		x += Math.random() * 20 + 15;
+		var sectorSize = 2 + Math.floor(Math.random() * 4), // how many elements in industrial sector
+			stackPos = Math.floor(Math.random() * sectorSize); // index of element with smoking stack
+		
+		for (var z = 0; z < sectorSize; z++) {
+			if (z == stackPos) {
+				x = this.addStack(x);
+			} else {
+				// pick random name from elementDefs
+				var name = elementDefs[Math.floor(Math.random() * elementDefs.length)];
+				x = this.addByDefName(name, x);
+			}
+		}
+		x += Math.random() * 10 + 5;
 	}
 	return x;
 };
@@ -160,13 +176,12 @@ FieldFactory.prototype.addIndustrialSector = function(opts, x, qty) {
 FieldFactory.prototype.addByDefName = function(name, x) {
 	var def = this.defRepo.get(name), 
 		element = new flame.entity.Thing(),
-		box = def.body.fixtures.main.box,
-		postfix = Math.random() * 3;
+		box = def.body.fixtures.main.box;
 	
 	element.type = name;
-	element.location = ccp(x, 0.9 + box.height / 2);
+	element.location = ccp(x + box.width / 2, 0.9 + box.height / 2);
 	this.candids.push(element);
-	return x + box.width + postfix;
+	return x + box.width;
 };
 
 FieldFactory.prototype.addHouses = function(opts, x, qty) {
@@ -181,7 +196,7 @@ FieldFactory.prototype.addHouses = function(opts, x, qty) {
 		x += size.width / 2;
 		
 		if (Math.random() > 0.7) {
-			x = this.addByDefName("brickhouse", x);
+			x = this.addByDefName("brickhouse", x) + Math.random() * 3;
 			continue;
 		}
 		

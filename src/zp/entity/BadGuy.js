@@ -9,7 +9,7 @@ function BadGuy(opts) {
 	this.locked = true;
 	
 	this.acceleration = 0.1;
-	this.maxSpeed = 3.5;
+	this.maxSpeed = 3;
 	this.speed = 0;
 	
 	// how distance will affect maxSpeed of badguy

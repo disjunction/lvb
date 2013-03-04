@@ -13,17 +13,17 @@ var
 	
 
 /**
- * generates a Easy level
+ * generates a Medium level
  * 
  * @param defRepo
  */
-function EasyFactory(defRepo) {
-	EasyFactory.superclass.constructor.call(this, defRepo);
+function MediumFactory(defRepo) {
+	MediumFactory.superclass.constructor.call(this, defRepo);
 }
 
-EasyFactory.inherit(FieldFactory, {
+MediumFactory.inherit(FieldFactory, {
 	make: function(opts) {
-		this.field.level = 'easy';
+		this.field.level = 'Medium';
 		
 		this.addGround(opts);
 
@@ -34,24 +34,22 @@ EasyFactory.inherit(FieldFactory, {
 		
 		this.candids.push(this.field.badguy);
 		
-		var x = 10;
-		this.addBackgrounds(opts, -20, 150);
-		this.candids.push(this.makeTable('Goodville South', x));
+		var x = this.addIndustrialSector(opts, 20, 10);
+		
+		this.addBackgrounds(opts, x, 150);
+		
 		this.addHouses(opts, x+=10, 10);
 		
 		this.addClouds(opts, x+=30, 4);
 		
 		x = this.addZeps(opts, x+=25, 7);
 		
-		this.candids.push(this.makeTable('Goodville North', x + 3));
-		this.addHouses(opts, x+=10, 15);
+		this.addHouses(opts, x+=30, 15);
 		
 		this.addZeps(opts, x+=10, 30);
 		x = this.addClouds(opts, x+=5, 10);
 		
-		this.candids.push(this.makeTable('Stackdorf', x + 3));
-		
-		var fin = this.addStacks(opts, x+=10, 7);
+		var fin = this.addStacks(opts, x+=5, 7);
 		this.addClouds(opts, x+=30, 15);	
 		
 		this.addZeps(opts, x+=50, 10);
@@ -64,4 +62,4 @@ EasyFactory.inherit(FieldFactory, {
 	}
 });
 
-module.exports = EasyFactory;
+module.exports = MediumFactory;

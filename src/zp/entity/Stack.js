@@ -21,7 +21,7 @@ function Stack(opts) {
 	};
 	
 	this.height = 9;
-	this.period = 2200;
+	this.period = 2500;
 	this.lastPuffTime = Date.now();
 }
 

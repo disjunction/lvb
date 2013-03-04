@@ -43,6 +43,7 @@ function Zp () {
     var className;
     switch (webpage.params.level) {
 	    case 'tutorial': className = 'TutorialFactory';break;
+	    case 'medium': className = 'MediumFactory';break;
 	    default: className = 'EasyFactory';
     }
     var fieldFactory = new(require('./zp/demiurge/' + className))(defRepo);
