@@ -78,13 +78,12 @@ TutorialFactory.inherit(FieldFactory, {
 		this.candids.push(this.makeHanger('Avoid smoke!', ccp(x+=20, 11)));
 		var fin = this.addStacks(opts, x+=5, 4);
 		this.addClouds(opts, x+=30, 10);
-		this.addZeps(opts, x+=60, 7);
+		this.addZeps(opts, x+=40, 7);
 		
-		
-		this.candids.push(this.makeHanger('Maps are generated dynamically.', ccp(x+=20, 11)));
+		this.candids.push(this.makeHanger('Maps are generated dynamically.', ccp(fin - 20, 11)));
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
-		this.field.goodguy.location = ccp(fin + 10, 7.5);
+		this.field.goodguy.location = ccp(fin + 40, 7.5);
 		this.candids.push(this.field.goodguy);
 		
 		return this.candidsToField(opts);

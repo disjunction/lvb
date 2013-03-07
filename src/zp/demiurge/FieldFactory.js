@@ -21,6 +21,8 @@ function FieldFactory(defRepo) {
 	// meters / second for puffs
 	this.field.wind = ccp(-1, 0);
 	
+	this.zepHp = 50;
+	
 	this.uniDef = 0;
 }
 
@@ -33,7 +35,7 @@ FieldFactory.prototype.addGround = function(opts) {
 	var x = -30,
 	    y = 0.5;
 	
-	for (var i = 0; i < 500; i++) {
+	for (var i = 0; i < 700; i++) {
 		var index = Math.floor(Math.random() * this.grounds.length),
 			def = this.defRepo.get(this.grounds[index]),
 			size = def.body.fixtures.main.box,
@@ -117,6 +119,7 @@ FieldFactory.prototype.addZeps = function(opts, x, qty) {
 		var element = new Flier('pirate');
 			x += Math.random() * 7 + 3;
 		element.location = ccp(x, 12 + Math.random() * 7);
+		element.hp = this.zepHp;
 		if (def.direction) element.direction = def.direction;
 		this.candids.push(element);
 	}

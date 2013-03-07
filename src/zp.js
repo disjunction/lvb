@@ -16,7 +16,7 @@ var smog = require('smog'),
 smog.app.mergeConfig(require('/configs/development'));
 
 // extend config depending on host
-if (webpage.host == 'zp.pluseq.com') {
+if (webpage.host == 'flatgametk.pluseq.com') {
 	smog.app.mergeConfig(require('/configs/production'));
 }
 
@@ -79,7 +79,7 @@ Zp.inherit(Layer, {
 	
 	// callback for "back to main menu"
 	home: function() {
-		webpage.window.location = smog.app.config.extras.baseUrl;
+		webpage.window.location = smog.app.config.homeUrl;
 	}
 });
 

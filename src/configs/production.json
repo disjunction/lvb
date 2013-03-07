@@ -1,5 +1,6 @@
 {
 	"extras": {
-		"baseUrl": "http://zp.pluseq.com/game"
-	}
+		"baseUrl": "http://flatgametk.pluseq.com/demo/lvb/extras"
+	},
+	"homeUrl": "http://flatgametk.pluseq.com/index.php/Demo"
 }

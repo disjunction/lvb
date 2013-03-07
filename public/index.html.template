@@ -29,7 +29,7 @@
     <body>
         <a href="javascript:zp.home()">back to main menu</a>
         <div class="cocos2d-app" id="cocos2dView">
-            Loading loader of loader for loading Zeppelin Pursuit...
+            Loading loader of loader for loading Lenin vs Bender...
             ${scripts}
         </div>
     </body>

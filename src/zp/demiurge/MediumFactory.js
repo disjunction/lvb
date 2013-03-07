@@ -19,6 +19,8 @@ var
  */
 function MediumFactory(defRepo) {
 	MediumFactory.superclass.constructor.call(this, defRepo);
+	
+	this.zepHp = 75;
 }
 
 MediumFactory.inherit(FieldFactory, {
@@ -34,28 +36,42 @@ MediumFactory.inherit(FieldFactory, {
 		
 		this.candids.push(this.field.badguy);
 		
-		var x = this.addIndustrialSector(opts, 20, 10);
+		this.addBackgrounds(opts, -20, 20);
 		
-		this.addBackgrounds(opts, x, 150);
+		var x = 10;
 		
+		this.candids.push(this.makeTable('Eching', x));
 		this.addHouses(opts, x+=10, 10);
+		this.addClouds(opts, x+=20, 30);
+		x = this.addZeps(opts, x+=40, 10);
+
+		this.candids.push(this.makeTable('Garching', x));
 		
-		this.addClouds(opts, x+=30, 4);
+		var secEnd = this.addIndustrialSector(opts, x + 5, 10);
+		this.addZeps(opts, x+=40, 20);
 		
-		x = this.addZeps(opts, x+=25, 7);
+		x = secEnd;
 		
-		this.addHouses(opts, x+=30, 15);
+		this.candids.push(this.makeTable('Misty Wood', x));
 		
-		this.addZeps(opts, x+=10, 30);
-		x = this.addClouds(opts, x+=5, 10);
+		this.addBackgrounds(opts, x + 5, 100);
+		this.addClouds(opts, x+=20, 30);
+		this.addIndustrialSector(opts, x + 45, 2);
+		this.addZeps(opts, x + 60, 10);
 		
-		var fin = this.addStacks(opts, x+=5, 7);
-		this.addClouds(opts, x+=30, 15);	
+		x = this.addIndustrialSector(opts, x + 130, 2);
+
+		this.addZeps(opts, x, 40);
 		
-		this.addZeps(opts, x+=50, 10);
+		this.candids.push(this.makeTable('Milbertshofen', x));
+		this.addClouds(opts, x+30, 40);
+
+		x = this.addHouses(opts, x+10, 10);
+		x = this.addIndustrialSector(opts, x, 2);
+		x = this.addHouses(opts, x, 10);
 		
 		this.field.goodguy = new flame.entity.Thing('goodguy');
-		this.field.goodguy.location = ccp(fin + 10, 7.5);
+		this.field.goodguy.location = ccp(x + 5, 7.5);
 		this.candids.push(this.field.goodguy);
 		
 		return this.candidsToField(opts);
