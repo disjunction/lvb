@@ -321,7 +321,10 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 	
 	// this code is bad because fe shouldn't depend on protagonist and ef
 	tryShot: function(thing, protagonist) {
-		var gun = thing.gun;
+		var gun = thing.gun,
+			body = this.get(thing.bodyId);
+		
+		if (!body) return;
 		
 		if (gun.autofire && gun.charge < gun.maxCharge) return;
 		
@@ -333,7 +336,7 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			recoil: gun.recoil,
 			impact: gun.impact
 		};
-		if (this.get(thing.bodyId).GetLinearVelocity().x <= 2) {
+		if (body.GetLinearVelocity().x <= 2) {
 			opts.recoil = 0;
 		}
 		
@@ -352,6 +355,12 @@ FieldEngine.inherit(flame.engine.FieldEngine, {
 			} else {
 				this.ef.gunHit(protagonist, gun, r);
 			}
+		} else {
+			// there was no hit, but we need to show something :\
+			var fakeHit = new flame.entity.Thing();
+			fakeHit.location = ccp(thing.location.x + gun.range * Math.cos(thing.angle),
+								   thing.location.y + gun.range * Math.sin(thing.angle));
+			this.ef.gunShot(protagonist, thing, fakeHit);
 		}
 		
 		gun.resetCharge();

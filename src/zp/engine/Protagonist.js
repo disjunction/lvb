@@ -130,6 +130,7 @@ Protagonist.inherit(flame.engine.Protagonist, {
 		label.anchorPoint = ccp(0.5, 0.5);
 		label.position = ccp(this.viewport.size.width / 2, this.viewport.size.height / 3 * 2);
 		this.viewport.hud.addChild(label);
+		this.ego.state.enabled = false;
 	},
 
 	startGameWon: function() {

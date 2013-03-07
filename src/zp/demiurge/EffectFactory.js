@@ -41,14 +41,41 @@ EffectFactory.prototype.throwCrates = function(p, fromX, toX, count) {
 /**
  * 
  * @param Protagonist p
- * @param Number fromX
- * @param Number toX
- * @param Number count
+ * @param Gun gun
+ * @param Impact count - see RayCaster
  */
 EffectFactory.prototype.gunHit = function(p, gun, impact) {
 	var hitThing = new flame.entity.Thing(gun.hit.type);
 	hitThing.location = impact.impactPoint;
 	p.fe.envision(hitThing);
+	
+	this.gunShot(p, p.ego, hitThing);
+};
+
+/**
+ * 
+ * @param Protagonist p
+ * @param Number fromX
+ * @param Number toX
+ * @param Number count
+ */
+EffectFactory.prototype.gunShot = function(p, zep, explode) {
+	// if shot is too short, then don't show it
+	if (geo.ccpDistance(zep.location, explode.location) < 3) return;
+	
+	var opts = {
+			start: {
+				thing: zep,
+				anchor: {point: ccp(0,0)}
+			},
+			end: {
+				thing: explode,
+				anchor: {point: ccp(0,0)}
+			}
+		},
+		shot = new flame.entity.Stretcher('gutling_shot');
+	shot.stretch = opts;
+	p.fe.envision(shot);
 };
 
 /**

@@ -1,5 +1,4 @@
 {
-	// smoking stack
 	"stack01": {
 		"nodes": {
 			"obstacle": {
@@ -21,7 +20,7 @@
 			}
 		}
 	},
-	// non-smoking stack
+
 	"stack02": {
 		"nodes": {
 			"obstacle": {
@@ -42,5 +41,5 @@
 				}
 			}
 		}
-	},
+	}
 }

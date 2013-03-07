@@ -10,6 +10,7 @@ exports.testMake = function(test) {
 	defRepo.loadFile(path + '/resources/data/flyers/zeps');
 	defRepo.loadFile(path + '/resources/data/backgrounds');
 	defRepo.loadFile(path + '/resources/data/effects');
+	defRepo.loadFile(path + '/resources/data/stacks');
 	
 	var factory = new FieldFactory(defRepo),
 	    field = factory.make();
