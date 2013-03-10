@@ -1,1 +1,1 @@
-/home/or/projects/flatgametk/util/EventDispatcher.js
+/home/or/projects/flatgametk/src/util/EventDispatcher.js

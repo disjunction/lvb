@@ -20,12 +20,12 @@ var
 function MediumFactory(defRepo) {
 	MediumFactory.superclass.constructor.call(this, defRepo);
 	
-	this.zepHp = 75;
+	this.zepHp = 100;
 }
 
 MediumFactory.inherit(FieldFactory, {
 	make: function(opts) {
-		this.field.level = 'Medium';
+		this.field.level = 'Hard';
 		
 		this.addGround(opts);
 
@@ -53,7 +53,7 @@ MediumFactory.inherit(FieldFactory, {
 		x = secEnd;
 		
 		this.candids.push(this.makeTable('Misty Wood', x));
-		this.addBackgrounds(opts, x + 7, 50);
+		
 		this.addBackgrounds(opts, x + 5, 100);
 		this.addClouds(opts, x+=20, 30);
 		this.addIndustrialSector(opts, x + 45, 2);

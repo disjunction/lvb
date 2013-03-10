@@ -1,1 +1,1 @@
-/home/or/projects/flatgametk/util/pointExtension.js
+/home/or/projects/flatgametk/src/util/pointExtension.js
